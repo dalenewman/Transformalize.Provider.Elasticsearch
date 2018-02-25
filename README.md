@@ -10,11 +10,12 @@ Build the Autofac project and put it's output into Transformalize's *plugins* fo
 <add name='TestProcess' mode='init'>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='Elasticsearch' core='bogus' folder='c:\java\Elasticsearch-6.2.1\cores' path='Elasticsearch' port='8983' />
+    <add name='output' provider='elasticsearch' index='bogus' port='9200' version='6' />
   </connections>
   <entities>
     <add name='Contact' size='1000'>
       <fields>
+        <add name='Identity' type='int' primary-key='true' />
         <add name='FirstName' />
         <add name='LastName' />
         <add name='Stars' type='byte' min='1' max='5' />
@@ -25,18 +26,22 @@ Build the Autofac project and put it's output into Transformalize's *plugins* fo
 </add>
 ```
 
-This writes 1000 rows of bogus data to a Elasticsearch 6 core at *c:\java\Elasticsearch-6.2.1\cores\bogus*.
+This writes 1000 rows of bogus data to an Elasticsearch 6 index.
 
 ### Read Usage
 
 ```xml
 <add name='TestProcess' >
   <connections>
-    <add name='input' provider='Elasticsearch' core='bogus' folder='c:\java\Elasticsearch-6.2.1\cores' path='Elasticsearch' port='8983' />
+    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='6' />
   </connections>
   <entities>
-    <add name='Contact' page='1' size='10'>
+    <add name='contact' page='1' size='10'>
+      <order>
+        <add field='identity' />
+      </order>
       <fields>
+        <add name='identity' type='int' />
         <add name='firstname' />
         <add name='lastname' />
         <add name='stars' type='byte' />
@@ -47,23 +52,22 @@ This writes 1000 rows of bogus data to a Elasticsearch 6 core at *c:\java\Elasti
 </add>
 ```
 
-This reads 10 rows of bogus data from a Elasticsearch 6 core at *c:\java\Elasticsearch-6.2.1\cores\bogus*:
+This reads 10 rows of bogus data from an Elasticsearch 6 index:
 
 <pre>
-<strong>firstname,lastname,stars,reviewers</strong>
-Justin,Konopelski,3,153
-Eula,Schinner,2,41
-Tanya,Shanahan,4,412
-Emilio,Hand,4,469
-Rachel,Abshire,3,341
-Doyle,Beatty,4,458
-Delbert,Durgan,2,174
-Harold,Blanda,4,125
-Willie,Heaney,5,342
-Sophie,Hand,2,176</pre>
+<strong>identity,firstname,lastname,stars,reviewers</strong>
+1,Justin,Konopelski,3,153
+2,Eula,Schinner,2,41
+3,Tanya,Shanahan,4,412
+4,Emilio,Hand,4,469
+5,Rachel,Abshire,3,341
+6,Doyle,Beatty,4,458
+7,Delbert,Durgan,2,174
+8,Harold,Blanda,4,125
+9,Willie,Heaney,5,342
+10,Sophie,Hand,2,176</pre>
 
 ### Notes
 
 - Tested with Elasticsearch 6.
 - Field names go into Elasticsearch as lower case.
-- Uses older ElasticsearchNet at *https://ci.appveyor.com/nuget/Elasticsearchnet-022x5w7kmuba*.
