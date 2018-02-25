@@ -1,6 +1,6 @@
 ### Overview
 
-This adds a `Elasticsearch` provider to Transformalize using [ElasticsearchNet](https://github.com/ElasticsearchNet/ElasticsearchNet).  It is a plug-in compatible with Transformalize 0.3.3-beta.
+This adds an `Elasticsearch` provider to Transformalize using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net).  It is a plug-in compatible with Transformalize 0.3.4-beta.
 
 Build the Autofac project and put it's output into Transformalize's *plugins* folder.
 
