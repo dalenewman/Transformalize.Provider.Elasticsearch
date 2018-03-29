@@ -156,7 +156,7 @@ namespace Transformalize.Providers.Elasticsearch {
                                 };
                             } else {
                                 fields[alias] = new Dictionary<string, object> {
-                                    { "type", type },
+                                    { "type", version >= 5 ? "keyword" : "string" },
                                     { "store", searchType.Store }
                                 };
                             }
