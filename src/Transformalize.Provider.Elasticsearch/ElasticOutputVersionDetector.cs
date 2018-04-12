@@ -74,6 +74,16 @@ namespace Transformalize.Providers.Elasticsearch {
                 _context.Debug(() => result.DebugInformation);
             }
             var converted = value ?? null;
+
+            if (converted != null && version.Type.StartsWith("date")) {
+                try {
+                    var ms = Convert.ToInt64(converted);
+                    converted = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(ms);
+                } catch (Exception e) {
+                    _context.Error(e, $"Failed converting {version.Name} value {converted} to long (for epoch_millis) conversion to datetime.");
+                }
+            }
+
             _context.Debug(() => $"Found value: {converted ?? "null"}");
             return converted;
         }
@@ -132,7 +142,7 @@ namespace Transformalize.Providers.Elasticsearch {
 
         private ElasticsearchResponse<DynamicResponse> GetAggregations() {
 
-            if(_commonAggregations != null) {
+            if (_commonAggregations != null) {
                 return _commonAggregations;
             }
 
