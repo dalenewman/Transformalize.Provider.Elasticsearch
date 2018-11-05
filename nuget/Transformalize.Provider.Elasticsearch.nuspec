@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Elasticsearch</id>
-    <version>0.3.5-beta</version>
+    <version>0.3.12-beta</version>
     <title>Transformalize Transform using Elasticsearch</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,18 +10,18 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Elasticsearch</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using Elasticsearch</description>
-    <releaseNotes>initial release</releaseNotes>
+    <releaseNotes>target 462</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>etl</tags>
     <dependencies>
-      <group targetFramework="net452">
-        <dependency id="Transformalize" version="0.3.5-beta" />
-        <dependency id="Elasticsearch.Net" version="5.6.0" />
-        <dependency id="Newtonsoft.Json" version="7.0.1" />
+      <group targetFramework="net462">
+        <dependency id="Transformalize" version="0.3.12-beta" />
+        <dependency id="Elasticsearch.Net" version="5.6.4" />
+        <dependency id="Newtonsoft.Json" version="11.0.2" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Transformalize.Provider.Elasticsearch\bin\Release\Transformalize.Provider.Elasticsearch.dll" target="lib\net452\Transformalize.Provider.Elasticsearch.dll" />
+    <file src="..\src\Transformalize.Provider.Elasticsearch\bin\Release\Transformalize.Provider.Elasticsearch.dll" target="lib\net462\Transformalize.Provider.Elasticsearch.dll" />
   </files>
 </package>

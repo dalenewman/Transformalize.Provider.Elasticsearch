@@ -22,7 +22,6 @@ using System.Linq;
 using Autofac;
 using Elasticsearch.Net;
 using Transformalize.Configuration;
-using Transformalize.Containers.Autofac;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Impl;
