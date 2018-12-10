@@ -16,11 +16,11 @@
 // limitations under the License.
 #endregion
 
+using Autofac;
+using Elasticsearch.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Elasticsearch.Net;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -35,12 +35,19 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
 
         protected override void Load(ContainerBuilder builder) {
 
-            if (!builder.Properties.ContainsKey("Process"))
-            {
+            if (!builder.Properties.ContainsKey("Process")) {
                 return;
             }
 
-            var process = (Process) builder.Properties["Process"];
+            var process = (Process)builder.Properties["Process"];
+
+            //MAPS
+            foreach (var map in process.Maps.Where(m => m.Connection != string.Empty && m.Query != string.Empty)) {
+                var connection = process.Connections.First(c => c.Name == map.Connection);
+                if (connection != null && connection.Provider == "elasticsearch") {
+                    builder.Register<IMapReader>(ctx => new DefaultMapReader()).Named<IMapReader>(map.Name);
+                }
+            }
 
             //CONNECTIONS
             foreach (var connection in process.Connections.Where(c => c.Provider == "elasticsearch")) {

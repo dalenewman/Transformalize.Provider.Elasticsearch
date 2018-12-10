@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Elasticsearch.Autofac</id>
-    <version>0.3.12-beta</version>
+    <version>0.3.13-beta</version>
     <title>Transformalize Transform using Elasticsearch Autofac Module</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
