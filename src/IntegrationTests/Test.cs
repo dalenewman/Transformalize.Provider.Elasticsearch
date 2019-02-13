@@ -39,7 +39,7 @@ namespace IntegrationTests {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' index='bogus' port='9200' version='6' />
+    <add name='output' provider='elasticsearch' index='bogus' shards='3' replicas='0' port='9200' version='6' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>

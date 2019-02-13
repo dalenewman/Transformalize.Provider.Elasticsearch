@@ -17,6 +17,7 @@
 #endregion
 
 using Elasticsearch.Net;
+using Newtonsoft.Json.Linq;
 using Transformalize.Actions;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -35,7 +36,10 @@ namespace Transformalize.Providers.Elasticsearch {
             if (_client.IndicesExists<DynamicResponse>(_context.Connection.Index).HttpStatusCode == 200) {
                 _client.IndicesDelete<VoidResponse>(_context.Connection.Index);
             }
-            var elasticResponse = _client.IndicesCreate<DynamicResponse>(_context.Connection.Index, "{ \"settings\":{}}");
+
+            var settings = new JObject { { "settings", new JObject { { "number_of_shards", _context.Connection.Shards }, { "number_of_replicas", _context.Connection.Replicas } } } };
+            var elasticResponse = _client.IndicesCreate<DynamicResponse>(_context.Connection.Index, settings.ToString());
+
             return new ActionResponse {
                 Code = elasticResponse.HttpStatusCode ?? 500,
                 Message = elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
