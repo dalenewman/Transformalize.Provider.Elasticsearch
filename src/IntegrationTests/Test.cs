@@ -39,7 +39,7 @@ namespace IntegrationTests {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' index='bogus' shards='3' replicas='0' port='9200' version='6' />
+    <add name='output' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' shards='3' replicas='0' port='9201' version='7' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>
@@ -54,13 +54,11 @@ namespace IntegrationTests {
   </entities>
 </add>";
          var logger = new ConsoleLogger(LogLevel.Debug);
-         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
-            var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer(new BogusModule(), new ElasticsearchModule()).CreateScope(process, logger)) {
 
-               var controller = inner.Resolve<IProcessController>();
-               controller.Execute();
-
+         using (var x = new ConfigurationContainer().CreateScope(xml, logger)) {
+            var process = x.Resolve<Process>();
+            using (var y = new Container(new BogusModule(), new ElasticsearchModule()).CreateScope(process, logger)) {
+               y.Resolve<IProcessController>().Execute();
                Assert.AreEqual(process.Entities.First().Inserts, (uint)1000);
             }
          }
@@ -70,7 +68,7 @@ namespace IntegrationTests {
       public void Read() {
          const string xml = @"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='6' />
+    <add name='input' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' port='9201' version='7.0.0' />
     <add name='output' provider='internal' />
   </connections>
   <entities>
@@ -87,7 +85,7 @@ namespace IntegrationTests {
          var logger = new ConsoleLogger(LogLevel.Debug);
          using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer(new ElasticsearchModule()).CreateScope(process, logger)) {
+            using (var inner = new Container(new ElasticsearchModule()).CreateScope(process, logger)) {
 
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();

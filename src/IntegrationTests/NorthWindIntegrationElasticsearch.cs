@@ -83,7 +83,7 @@ namespace IntegrationTests {
 
          using (var outer = new ConfigurationContainer().CreateScope(SqlTestFile + "?Mode=init", logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -91,7 +91,7 @@ namespace IntegrationTests {
 
          using (var outer = new ConfigurationContainer().CreateScope(ElasticTestFile + "?Mode=init", logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -102,7 +102,7 @@ namespace IntegrationTests {
          // FIRST DELTA, NO CHANGES
          using (var outer = new ConfigurationContainer().CreateScope(ElasticTestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -120,7 +120,7 @@ namespace IntegrationTests {
          // RUN AND CHECK SQL
          using (var outer = new ConfigurationContainer().CreateScope(SqlTestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -137,7 +137,7 @@ namespace IntegrationTests {
          // RUN AND CHECK ELASTIC
          using (var outer = new ConfigurationContainer().CreateScope(ElasticTestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -177,7 +177,7 @@ namespace IntegrationTests {
          // RUN AND CHECK SQL
          using (var outer = new ConfigurationContainer().CreateScope(SqlTestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -193,7 +193,7 @@ namespace IntegrationTests {
          // RUN AND CHECK ELASTIC
          using (var outer = new ConfigurationContainer().CreateScope(ElasticTestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer().CreateScope(process, logger)) {
+            using (var inner = new Container().CreateScope(process, logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }

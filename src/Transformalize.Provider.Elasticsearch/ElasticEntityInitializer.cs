@@ -25,42 +25,42 @@ using Transformalize.Context;
 using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Elasticsearch {
-    public class ElasticEntityInitializer : IAction {
+   public class ElasticEntityInitializer : IAction {
 
-        private readonly OutputContext _context;
-        private readonly IElasticLowLevelClient _client;
+      private readonly OutputContext _context;
+      private readonly IElasticLowLevelClient _client;
 
-        private static string TranslateType(string type) {
-            switch (type) {
-                case "int64":
-                    return "long";
-                case "int16":
-                    return "short";
-                case "int":
-                case "int32":
-                    return "integer";
-                case "datetime":
-                case "time":
-                    return "date";
-                case "bool":
-                    return "boolean";
-                case "decimal":
-                    return "double";
-                case "single":
-                    return "float";
-                case "byte[]":
-                    return "binary";
-                case "guid":
-                case "char":
-                    return "string"; // dealt with later
-                default:
-                    return type;
-            }
-        }
+      private static string TranslateType(string type) {
+         switch (type) {
+            case "int64":
+               return "long";
+            case "int16":
+               return "short";
+            case "int":
+            case "int32":
+               return "integer";
+            case "datetime":
+            case "time":
+               return "date";
+            case "bool":
+               return "boolean";
+            case "decimal":
+               return "double";
+            case "single":
+               return "float";
+            case "byte[]":
+               return "binary";
+            case "guid":
+            case "char":
+               return "string"; // dealt with later
+            default:
+               return type;
+         }
+      }
 
 
 
-        private readonly List<string> _analyzers = new List<string> {
+      private readonly List<string> _analyzers = new List<string> {
             "standard",
             "simple",
             "whitespace",
@@ -101,118 +101,115 @@ namespace Transformalize.Providers.Elasticsearch {
         };
 
 
-        public ElasticEntityInitializer(OutputContext context, IElasticLowLevelClient client) {
-            _context = context;
-            _client = client;
-        }
+      public ElasticEntityInitializer(OutputContext context, IElasticLowLevelClient client) {
+         _context = context;
+         _client = client;
+      }
 
-        public ActionResponse Execute() {
-            _context.Warn("Initializing");
+      public ActionResponse Execute() {
+         _context.Warn("Initializing");
 
-            // default to version 5 if not set
-            if (_context.Connection.Version == Constants.DefaultSetting) {
-                _context.Connection.Version = "5";
-            }
+         var version = ElasticVersionParser.ParseVersion(_context);
 
-            var properties = new Dictionary<string, object> { { "properties", GetFields() } };
-            var typeName = _context.Entity.Alias.ToLower();
-            var body = new Dictionary<string, object> { { typeName, properties } };
-            var json = JsonConvert.SerializeObject(body);
+         var properties = new Dictionary<string, object> { { "properties", GetFields() } };
+         var typeName = _context.Entity.Alias.ToLower();
+         var body = new Dictionary<string, object> { { typeName, properties } };
+         var json = JsonConvert.SerializeObject(body);
 
-            var elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json);
-            return new ActionResponse {
-                Code = elasticResponse.HttpStatusCode ?? 500,
-                Message = elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
-            };
-        }
+         var elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json);
+         return new ActionResponse {
+            Code = elasticResponse.HttpStatusCode ?? 500,
+            Message = elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+         };
+      }
 
-        private Dictionary<string, object> GetFields() {
+      private Dictionary<string, object> GetFields() {
 
-            decimal.TryParse(_context.Connection.Version, out var version);
+         var version = ElasticVersionParser.ParseVersion(_context);
 
-            var fields = new Dictionary<string, object>();
-            foreach (var field in _context.OutputFields) {
+         var fields = new Dictionary<string, object>();
+         foreach (var field in _context.OutputFields) {
 
-                var alias = field.Alias.ToLower();
-                var searchType = _context.Process.SearchTypes.First(st => st.Name == field.SearchType);
-                var analyzer = searchType.Analyzer;
+            var alias = field.Alias.ToLower();
+            var searchType = _context.Process.SearchTypes.First(st => st.Name == field.SearchType);
+            var analyzer = searchType.Analyzer;
 
-                var type = TranslateType(field.Type);
+            var type = TranslateType(field.Type);
 
-                if (field.Type.Equals("string")) {
+            if (field.Type.Equals("string")) {
 
-                    // by default, searchType.Type defers, but on occassion (e.g. geo_point), it takes over
-                    type = searchType.Type == "defer" ? type : searchType.Type;
+               // by default, searchType.Type defers, but on occassion (e.g. geo_point), it takes over
+               type = searchType.Type == "defer" ? type : searchType.Type;
 
-                    if (_analyzers.Contains(analyzer)) {
+               if (_analyzers.Contains(analyzer)) {
 
-                        // handle things that are not analyzed
-                        if (analyzer.Equals(string.Empty)) {
+                  // handle things that are not analyzed
+                  if (analyzer.Equals(string.Empty)) {
 
-                            if (type.Equals("geo_point")) {
-                                fields[alias] = new Dictionary<string, object> {
+                     if (type.Equals("geo_point")) {
+                        fields[alias] = new Dictionary<string, object> {
                                     { "properties", new Dictionary<string,object> {{ "location", new Dictionary<string,object> { {"type","geo_point"} } } }}
                                 };
-                            } else {
-                                fields[alias] = new Dictionary<string, object> {
-                                    { "type", version >= 5 ? "keyword" : "string" },
+                     } else {
+                        fields[alias] = new Dictionary<string, object> {
+                                    { "type", version.Major >= 5 ? "keyword" : "string" },
                                     { "store", searchType.Store }
                                 };
-                            }
+                     }
 
-                        } else {
+                  } else {
 
-                            if (version >= 5.0M) {
+                     if (version.Major >= 5) {
 
-                                // version 5+ use keyword and text types instead of string
-                                if (type == "string") {
-                                    if (analyzer == "keyword") {
-                                        fields[alias] = new Dictionary<string, object> {
+                        // version 5+ use keyword and text types instead of string
+                        if (type == "string") {
+                           if (analyzer == "keyword") {
+                              fields[alias] = new Dictionary<string, object> {
                                             { "type", "keyword" }
                                         };
-                                    } else {
-                                        fields[alias] = new Dictionary<string, object> {
+                           } else {
+                              fields[alias] = new Dictionary<string, object> {
                                             { "type", "text" },
                                             { "analyzer", analyzer },
                                             { "store", searchType.Store }
                                         };
-                                    }
-                                } else {
-                                    fields[alias] = new Dictionary<string, object> {
+                           }
+                        } else {
+                           fields[alias] = new Dictionary<string, object> {
                                         { "type", type },
                                         { "analyzer", analyzer }
                                     };
-                                }
-
-                            } else {  // versions prior to 5 uses string types and keyword analyzer
-                                fields[alias] = new Dictionary<string, object> {
-                                    { "type", type },
-                                    { "analyzer", analyzer },
-                                    { "store", searchType.Store }
-                                };
-                            }
                         }
 
-                    } else {
-                        //TODO: MOVE THIS INTO VALIDATION
-                        _context.Warn("Analyzer '{0}' specified in search type '{1}' is not supported.  Please use a built-in analyzer for Elasticsearch.", analyzer, field.SearchType);
-                        if (!fields.ContainsKey(alias)) {
-                            fields[alias] = new Dictionary<string, object> {
+                     } else {  // versions prior to 5 uses string types and keyword analyzer
+                        fields[alias] = new Dictionary<string, object> {
+                           { "type", type },
+                           { "analyzer", analyzer },
+                           { "store", searchType.Store }
+                        };
+                     }
+                  }
+
+               } else {
+                  //TODO: MOVE THIS INTO VALIDATION
+                  _context.Warn("Analyzer '{0}' specified in search type '{1}' is not supported.  Please use a built-in analyzer for Elasticsearch.", analyzer, field.SearchType);
+                  if (!fields.ContainsKey(alias)) {
+                     fields[alias] = new Dictionary<string, object> {
                                 { "type", type }
                             };
-                        }
-                    }
-                } else {
-                    fields[alias] = new Dictionary<string, object> { { "type", type } };
-                }
+                  }
+               }
+            } else {
+               fields[alias] = new Dictionary<string, object> { { "type", type } };
             }
+         }
 
-            if (!fields.ContainsKey("tflbatchid")) {
-                fields.Add("tflbatchid", new Dictionary<string, object> { { "type", "integer" } });
-            }
+         if (!fields.ContainsKey("tflbatchid")) {
+            fields.Add("tflbatchid", new Dictionary<string, object> { { "type", "integer" } });
+         }
 
-            return fields;
-        }
+         return fields;
+      }
 
-    }
+   }
 }
