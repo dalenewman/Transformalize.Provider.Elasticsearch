@@ -58,8 +58,6 @@ namespace Transformalize.Providers.Elasticsearch {
          }
       }
 
-
-
       private readonly List<string> _analyzers = new List<string> {
             "standard",
             "simple",
@@ -116,11 +114,26 @@ namespace Transformalize.Providers.Elasticsearch {
          var body = new Dictionary<string, object> { { typeName, properties } };
          var json = JsonConvert.SerializeObject(body);
 
-         var elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json);
-         return new ActionResponse {
-            Code = elasticResponse.HttpStatusCode ?? 500,
-            Message = elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+         ElasticsearchResponse<DynamicResponse> elasticResponse;
+
+         if (version.Major >= 7) {
+            elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json, qs => qs.AddQueryString("include_type_name", "true"));
+         } else {
+            elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json);
+         }
+
+         var response = new ActionResponse(
+            elasticResponse.HttpStatusCode ?? 500,
+            elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+         ) {
+            Action = new Configuration.Action() {
+               Type = "internal",
+               ErrorMode = "continue",
+               Description = $"Initialize {typeName} entity."
+            }
          };
+
+         return response;
       }
 
       private Dictionary<string, object> GetFields() {

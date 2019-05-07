@@ -23,27 +23,37 @@ using Transformalize.Context;
 using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Elasticsearch {
-    public class ElasticInitializer : IInitializer {
-        private readonly OutputContext _context;
-        private readonly IElasticLowLevelClient _client;
+   public class ElasticInitializer : IInitializer {
 
-        public ElasticInitializer(OutputContext context, IElasticLowLevelClient client) {
-            _context = context;
-            _client = client;
-        }
+      private readonly OutputContext _context;
+      private readonly IElasticLowLevelClient _client;
 
-        public ActionResponse Execute() {
-            if (_client.IndicesExists<DynamicResponse>(_context.Connection.Index).HttpStatusCode == 200) {
-                _client.IndicesDelete<VoidResponse>(_context.Connection.Index);
+      public ElasticInitializer(OutputContext context, IElasticLowLevelClient client) {
+         _context = context;
+         _client = client;
+      }
+
+      public ActionResponse Execute() {
+
+         if (_client.IndicesExists<DynamicResponse>(_context.Connection.Index).HttpStatusCode == 200) {
+            _client.IndicesDelete<VoidResponse>(_context.Connection.Index);
+         }
+
+         var settings = new JObject { { "settings", new JObject { { "number_of_shards", _context.Connection.Shards }, { "number_of_replicas", _context.Connection.Replicas } } } };
+         var elasticResponse = _client.IndicesCreate<DynamicResponse>(_context.Connection.Index, settings.ToString());
+
+         var response = new ActionResponse(
+            elasticResponse.HttpStatusCode ?? 500,
+            elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+         ) {
+            Action = new Configuration.Action() {
+               Type = "internal",
+               ErrorMode = "continue",
+               Description = "Elasticsearch Initializer"
             }
+         };
 
-            var settings = new JObject { { "settings", new JObject { { "number_of_shards", _context.Connection.Shards }, { "number_of_replicas", _context.Connection.Replicas } } } };
-            var elasticResponse = _client.IndicesCreate<DynamicResponse>(_context.Connection.Index, settings.ToString());
-
-            return new ActionResponse {
-                Code = elasticResponse.HttpStatusCode ?? 500,
-                Message = elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
-            };
-        }
-    }
+         return response;
+      }
+   }
 }

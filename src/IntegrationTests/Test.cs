@@ -39,7 +39,7 @@ namespace IntegrationTests {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' shards='3' replicas='0' port='9201' version='7' />
+    <add name='output' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' shards='3' replicas='0' port='9201' version='7.0.0' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>

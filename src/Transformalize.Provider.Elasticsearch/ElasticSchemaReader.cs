@@ -23,97 +23,112 @@ using Transformalize.Configuration;
 using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Elasticsearch {
-    public class ElasticSchemaReader : ISchemaReader {
-        private readonly IConnectionContext _input;
-        private readonly string _index;
-        private readonly IElasticLowLevelClient _client;
+   public class ElasticSchemaReader : ISchemaReader {
+      private readonly IConnectionContext _input;
+      private readonly string _index;
+      private readonly IElasticLowLevelClient _client;
 
-        public ElasticSchemaReader(IConnectionContext input, IElasticLowLevelClient client) {
-            _input = input;
-            _client = client;
-            _index = input.Connection.Index;
-        }
+      public ElasticSchemaReader(IConnectionContext input, IElasticLowLevelClient client) {
+         _input = input;
+         _client = client;
+         _index = input.Connection.Index;
+      }
 
-        public IEnumerable<Field> GetFields(string name) {
+      public IEnumerable<Field> GetFields(string name) {
 
-            var response = _client.IndicesGetMapping<DynamicResponse>(_index, name);
+         var version = ElasticVersionParser.ParseVersion(_input);
+         ElasticsearchResponse<DynamicResponse> response;
 
-            if (response.Success) {
-                var properties = response.Body[_index]["mappings"][name]["properties"] as ElasticsearchDynamicValue;
-                if (properties != null && properties.HasValue) {
-                    return PropertiesToFields(name, properties.Value as IDictionary<string, object>);
-                }
-                _input.Error("Could not find properties for index {0} type {1}.", _index, name);
-            } else {
-                _input.Error(response.ToString());
+         if (version.Major >= 7) {
+            response = _client.IndicesGetMapping<DynamicResponse>(_index, name, qs => qs.AddQueryString("include_type_name", "true"));
+         } else {
+            response = _client.IndicesGetMapping<DynamicResponse>(_index, name);
+         }
+
+         if (response.Success) {
+            var properties = response.Body[_index]["mappings"][name]["properties"] as ElasticsearchDynamicValue;
+            if (properties != null && properties.HasValue) {
+               return PropertiesToFields(name, properties.Value as IDictionary<string, object>);
             }
+            _input.Error("Could not find properties for index {0} type {1}.", _index, name);
+         } else {
+            _input.Error(response.ToString());
+         }
 
-            return Enumerable.Empty<Field>();
+         return Enumerable.Empty<Field>();
 
-        }
+      }
 
-        private IEnumerable<Field> PropertiesToFields(string name, IDictionary<string, object> properties) {
-            if (properties != null) {
-                foreach (var field in properties) {
-                    var f = new Field { Name = field.Key };
-                    var attributes = field.Value as IDictionary<string, object>;
-                    if (attributes != null && attributes.ContainsKey("type")) {
-                        f.Type = attributes["type"].ToString();
-                        if (f.Type == "integer") {
-                            f.Type = "int";
-                        }
-                    } else {
-                        _input.Warn("Could not find type for index {0} type {1} field {2}. Default is string.", _index, name, field.Key);
-                    }
-                    yield return f;
-                }
-            } else {
-                _input.Error("Could not find fields for index {0} type {1}.", _index, name);
+      private IEnumerable<Field> PropertiesToFields(string name, IDictionary<string, object> properties) {
+         if (properties != null) {
+            foreach (var field in properties) {
+               var f = new Field { Name = field.Key };
+               var attributes = field.Value as IDictionary<string, object>;
+               if (attributes != null && attributes.ContainsKey("type")) {
+                  f.Type = attributes["type"].ToString();
+                  if (f.Type == "integer") {
+                     f.Type = "int";
+                  }
+               } else {
+                  _input.Warn("Could not find type for index {0} type {1} field {2}. Default is string.", _index, name, field.Key);
+               }
+               yield return f;
             }
-        }
+         } else {
+            _input.Error("Could not find fields for index {0} type {1}.", _index, name);
+         }
+      }
 
-        public IEnumerable<Entity> GetEntities() {
-            var response = _client.IndicesGetMapping<DynamicResponse>(_index, "_all");
+      public IEnumerable<Entity> GetEntities() {
 
-            if (response.Success) {
-                var mappings = response.Body[_index]["mappings"] as ElasticsearchDynamicValue;
-                if (mappings != null && mappings.HasValue) {
-                    var types = mappings.Value as IDictionary<string, object>;
-                    if (types != null) {
-                        foreach (var pair in types) {
-                            var e = new Entity { Name = pair.Key };
-                            var attributes = pair.Value as IDictionary<string, object>;
-                            if (attributes != null && attributes.ContainsKey("properties")) {
-                                e.Fields = PropertiesToFields(pair.Key, attributes["properties"] as IDictionary<string, object>).ToList();
-                            } else {
-                                _input.Error("Could not find properties for index {0} type {1}.", _input, pair.Key);
-                            }
-                            yield return e;
-                        }
-                    } else {
-                        _input.Error("Could not find types in index {0}.", _index);
-                    }
-                } else {
-                    _input.Error("Could not find mappings for index {0}.", _index);
-                }
+         var version = ElasticVersionParser.ParseVersion(_input);
+         ElasticsearchResponse<DynamicResponse> response;
+
+         if (version.Major >= 7) {
+            response = _client.IndicesGetMapping<DynamicResponse>(_index, "_all", qs => qs.AddQueryString("include_type_name", "true"));
+         } else {
+            response = _client.IndicesGetMapping<DynamicResponse>(_index, "_all");
+         }
+
+         if (response.Success) {
+            var mappings = response.Body[_index]["mappings"] as ElasticsearchDynamicValue;
+            if (mappings != null && mappings.HasValue) {
+               var types = mappings.Value as IDictionary<string, object>;
+               if (types != null) {
+                  foreach (var pair in types) {
+                     var e = new Entity { Name = pair.Key };
+                     var attributes = pair.Value as IDictionary<string, object>;
+                     if (attributes != null && attributes.ContainsKey("properties")) {
+                        e.Fields = PropertiesToFields(pair.Key, attributes["properties"] as IDictionary<string, object>).ToList();
+                     } else {
+                        _input.Error("Could not find properties for index {0} type {1}.", _input, pair.Key);
+                     }
+                     yield return e;
+                  }
+               } else {
+                  _input.Error("Could not find types in index {0}.", _index);
+               }
             } else {
-                _input.Error(response.ToString());
+               _input.Error("Could not find mappings for index {0}.", _index);
             }
+         } else {
+            _input.Error(response.ToString());
+         }
 
-        }
+      }
 
-        public Schema Read() {
-            var schema = new Schema { Connection = _input.Connection };
-            schema.Entities.AddRange(GetEntities());
-            return schema;
-        }
+      public Schema Read() {
+         var schema = new Schema { Connection = _input.Connection };
+         schema.Entities.AddRange(GetEntities());
+         return schema;
+      }
 
-        public Schema Read(Entity entity) {
-            var schema = new Schema { Connection = _input.Connection };
-            entity.Fields = GetFields(entity.Name).ToList();
-            schema.Entities.Add(entity);
-            return schema;
-        }
+      public Schema Read(Entity entity) {
+         var schema = new Schema { Connection = _input.Connection };
+         entity.Fields = GetFields(entity.Name).ToList();
+         schema.Entities.Add(entity);
+         return schema;
+      }
 
-    }
+   }
 }
