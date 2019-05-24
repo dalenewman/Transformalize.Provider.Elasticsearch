@@ -88,8 +88,8 @@
     <Reference Include="Transformalize, Version=0.6.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.0.6.4-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Container.Autofac, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Container.Autofac.0.6.3-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>
+    <Reference Include="Transformalize.Container.Autofac, Version=0.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Container.Autofac.0.6.5-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Transformalize.Provider.Ado, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Provider.Ado.0.6.3-beta\lib\net462\Transformalize.Provider.Ado.dll</HintPath>

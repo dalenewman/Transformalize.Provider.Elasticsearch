@@ -1,17 +1,16 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Transformalize.Provider.Elasticsearch")]
+[assembly: AssemblyTitle("Transformalize.Provider.Elasticsearch.Autofac.v3")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Transformalize")]
-[assembly: AssemblyProduct("Transformalize.Provider.Elasticsearch")]
-[assembly: AssemblyCopyright("Copyright © 2018-2019 Dale Newman")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Transformalize.Provider.Elasticsearch.Autofac.v3")]
+[assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4ed1e259-756a-40b8-9800-f563b59e0206")]
+[assembly: Guid("df60b8c2-d93e-436d-80f3-915859527e5c")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,5 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.6.8.0")]
 [assembly: AssemblyFileVersion("0.6.8.0")]
-[assembly: NeutralResourcesLanguage("en-US")]
-

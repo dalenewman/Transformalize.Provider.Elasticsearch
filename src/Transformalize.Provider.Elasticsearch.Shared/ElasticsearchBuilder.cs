@@ -32,7 +32,7 @@ using Transformalize.Transforms.System;
 
 namespace Transformalize.Providers.Elasticsearch.Autofac {
 
-   public class ElasticsearchBuilder : Module {
+   public class ElasticsearchBuilder {
 
       private readonly ContainerBuilder _builder;
       private readonly Process _process;
