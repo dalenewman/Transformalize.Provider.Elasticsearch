@@ -40,6 +40,7 @@ namespace Transformalize.Providers.Elasticsearch {
       private readonly IRowFactory _rowFactory;
       private readonly ReadFrom _readFrom;
       private readonly string _typeName;
+      private readonly Version _version;
 
       public ElasticReader(
           IConnectionContext context,
@@ -57,7 +58,7 @@ namespace Transformalize.Providers.Elasticsearch {
          _readFrom = readFrom;
          _typeName = readFrom == ReadFrom.Input ? context.Entity.Name : context.Entity.Alias.ToLower();
          _context.Entity.ReadSize = _context.Entity.ReadSize == 0 ? 10000 : _context.Entity.ReadSize;
-
+         _version = ElasticVersionParser.ParseVersion(_context);
       }
 
       private string WriteQuery(
@@ -78,6 +79,10 @@ namespace Transformalize.Providers.Elasticsearch {
             writer.WriteValue(from);
             writer.WritePropertyName("size");
             writer.WriteValue(size);
+            if (_version.Major >= 6) {  // for now, everything below expects to know total number of hits
+               writer.WritePropertyName("track_total_hits");
+               writer.WriteValue(true);
+            }
 
             writer.WritePropertyName("_source");
             writer.WriteStartObject();
@@ -292,7 +297,7 @@ namespace Transformalize.Providers.Elasticsearch {
          string body;
          bool warned = false;
 
-         var version = ElasticVersionParser.ParseVersion(_context);
+         
 
          if (_context.Entity.IsPageRequest()) {
             from = (_context.Entity.Page * _context.Entity.Size) - _context.Entity.Size;
@@ -306,7 +311,7 @@ namespace Transformalize.Providers.Elasticsearch {
                   var total = hits["total"];
                   
                   try {
-                     if (version.Major >= 7) {  // version 7 changed total to an object with "value" and "relation" properties
+                     if (_version.Major >= 7) {  // version 7 changed total to an object with "value" and "relation" properties
                         size = Convert.ToInt32(total["value"].Value);
                      } else {
                         size = Convert.ToInt32(total.Value);
@@ -314,7 +319,7 @@ namespace Transformalize.Providers.Elasticsearch {
                   } catch (Exception ex) {
                      warned = true;
                      _context.Debug(() => total);
-                     _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {version}?");
+                     _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {_version}?");
                      _context.Error(ex, ex.Message);
                   }
 
@@ -336,7 +341,7 @@ namespace Transformalize.Providers.Elasticsearch {
          }
 
          try {
-            if (version.Major >= 7) {  // version 7 changed total to an object with "value" and "relation" properties
+            if (_version.Major >= 7) {  // version 7 changed total to an object with "value" and "relation" properties
                _context.Entity.Hits = Convert.ToInt32(response.Body["hits"]["total"]["value"].Value);
             } else {
                _context.Entity.Hits = Convert.ToInt32(response.Body["hits"]["total"].Value);
@@ -344,7 +349,7 @@ namespace Transformalize.Providers.Elasticsearch {
          } catch (Exception ex) {
             if (!warned) {
                _context.Debug(() => response.Body["hits"]);
-               _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {version}?");
+               _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {_version}?");
                _context.Error(ex.Message);
             }
          }
