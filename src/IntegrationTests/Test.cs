@@ -50,6 +50,9 @@ namespace IntegrationTests {
         <add name='Stars' type='byte' min='1' max='5' />
         <add name='Reviewers' type='int' min='0' max='500' />
       </fields>
+      <calculated-fields>
+         <add name='Names' t='copy(FirstName,LastName).toArray()' />
+      </calculated-fields>
     </add>
   </entities>
 </add>";
@@ -78,6 +81,7 @@ namespace IntegrationTests {
         <add name='lastname' />
         <add name='stars' type='byte' />
         <add name='reviewers' type='int' />
+        <add name='names' />
       </fields>
     </add>
   </entities>

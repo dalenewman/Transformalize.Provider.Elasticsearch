@@ -24,149 +24,155 @@ using Transformalize.Contracts;
 using Transformalize.Providers.Elasticsearch.Ext;
 
 namespace Transformalize.Providers.Elasticsearch {
-    public class ElasticOutputProvider : IOutputProvider {
+   public class ElasticOutputProvider : IOutputProvider {
 
-        private readonly OutputContext _context;
-        private readonly IElasticLowLevelClient _client;
-        private ElasticsearchResponse<DynamicResponse> _commonAggregations;
+      private readonly OutputContext _context;
+      private readonly IElasticLowLevelClient _client;
+      private ElasticsearchResponse<DynamicResponse> _commonAggregations;
 
-        public ElasticOutputProvider(OutputContext context, IElasticLowLevelClient client) {
-            _context = context;
-            _client = client;
-        }
+      public ElasticOutputProvider(OutputContext context, IElasticLowLevelClient client) {
+         _context = context;
+         _client = client;
+      }
 
-        public void Delete() {
-            throw new NotImplementedException();
-        }
+      public void Delete() {
+         throw new NotImplementedException();
+      }
 
-        public object GetMaxVersion() {
+      public object GetMaxVersion() {
 
-            // TODO: Consider tlfdeleted = 0
+         // TODO: Consider tlfdeleted = 0
 
-            if (string.IsNullOrEmpty(_context.Entity.Version))
-                return null;
+         if (string.IsNullOrEmpty(_context.Entity.Version))
+            return null;
 
-            var version = _context.Entity.GetVersionField();
+         var version = _context.Entity.GetVersionField();
 
-            _context.Debug(() => $"Detecting Max Output Version: {_context.Connection.Index}.{_context.TypeName()}.{version.Alias.ToLower()}.");
+         _context.Debug(() => $"Detecting Max Output Version: {_context.Connection.Index}.{_context.TypeName()}.{version.Alias.ToLower()}.");
 
-            var body = new {
-                aggs = new {
-                    version = new {
-                        max = new {
-                            field = version.Alias.ToLower()
-                        }
-                    }
-                },
-                size = 0
-            };
+         var body = new {
+            aggs = new {
+               version = new {
+                  max = new {
+                     field = version.Alias.ToLower()
+                  }
+               }
+            },
+            size = 0
+         };
 
-            var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
-            dynamic value = null;
-            if (result.Success) {
-                try {
-                    value = result.Body["aggregations"]["version"]["value"].Value;
-                } catch (Exception ex) {
-                    _context.Error(ex, ex.Message);
-                }
+         var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
+         dynamic value = null;
+         if (result.Success) {
+            try {
+               value = result.Body["aggregations"]["version"]["value"].Value;
+            } catch (Exception ex) {
+               _context.Error(ex, ex.Message);
+            }
+         } else {
+            if (result.ServerError != null) {
+               _context.Error(result.ServerError.ToString());
             } else {
-                _context.Error(result.ServerError.ToString());
-                _context.Debug(() => result.DebugInformation);
+               _context.Error(result.ToString());
             }
-            var converted = value ?? null;
-
-            if (converted != null && version.Type.StartsWith("date")) {
-                try {
-                    var ms = Convert.ToInt64(converted);
-                    converted = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(ms);
-                } catch (Exception e) {
-                    _context.Error(e, $"Failed converting {version.Name} value {converted} to long (for epoch_millis) conversion to datetime.");
-                }
+            if (result.DebugInformation != null) {
+               _context.Debug(() => result.DebugInformation);
             }
+         }
+         var converted = value ?? null;
 
-            _context.Debug(() => $"Found value: {converted ?? "null"}");
-            return converted;
-        }
-
-        public void End() {
-            throw new NotImplementedException();
-        }
-
-        public int GetNextTflBatchId() {
-
-            var result = GetAggregations();
-
-            if (result.Success) {
-                var batchId = result.Body["aggregations"]["b"]["value"].Value;
-                return (batchId == null ? 0 : (int)batchId) + 1;
-            } else {
-                _context.Error(result.ServerError.ToString());
-                _context.Debug(() => result.DebugInformation);
-                return 0;
+         if (converted != null && version.Type.StartsWith("date")) {
+            try {
+               var ms = Convert.ToInt64(converted);
+               converted = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(ms);
+            } catch (Exception e) {
+               _context.Error(e, $"Failed converting {version.Name} value {converted} to long (for epoch_millis) conversion to datetime.");
             }
+         }
 
-        }
+         _context.Debug(() => $"Found value: {converted ?? "null"}");
+         return converted;
+      }
 
-        public int GetMaxTflKey() {
-            var result = GetAggregations();
+      public void End() {
+         throw new NotImplementedException();
+      }
 
-            if (result.Success) {
-                var key = result.Body["aggregations"]["k"]["value"].Value;
-                return (key == null ? 0 : (int)key);
-            } else {
-                _context.Error(result.ServerError.ToString());
-                _context.Debug(() => result.DebugInformation);
-                return 0;
-            }
-        }
+      public int GetNextTflBatchId() {
 
-        public void Initialize() {
-            throw new NotImplementedException();
-        }
+         var result = GetAggregations();
 
-        public IEnumerable<IRow> Match(IEnumerable<IRow> rows) {
-            throw new NotImplementedException();
-        }
+         if (result.Success) {
+            var batchId = result.Body["aggregations"]["b"]["value"].Value;
+            return (batchId == null ? 0 : (int)batchId) + 1;
+         } else {
+            _context.Error(result.ServerError.ToString());
+            _context.Debug(() => result.DebugInformation);
+            return 0;
+         }
 
-        public IEnumerable<IRow> ReadKeys() {
-            throw new NotImplementedException();
-        }
+      }
 
-        public void Start() {
-            throw new NotImplementedException();
-        }
+      public int GetMaxTflKey() {
+         var result = GetAggregations();
 
-        public void Write(IEnumerable<IRow> rows) {
-            throw new NotImplementedException();
-        }
+         if (result.Success) {
+            var key = result.Body["aggregations"]["k"]["value"].Value;
+            return (key == null ? 0 : (int)key);
+         } else {
+            _context.Error(result.ServerError.ToString());
+            _context.Debug(() => result.DebugInformation);
+            return 0;
+         }
+      }
 
-        private ElasticsearchResponse<DynamicResponse> GetAggregations() {
+      public void Initialize() {
+         throw new NotImplementedException();
+      }
 
-            if (_commonAggregations != null) {
-                return _commonAggregations;
-            }
+      public IEnumerable<IRow> Match(IEnumerable<IRow> rows) {
+         throw new NotImplementedException();
+      }
 
-            var body = new {
-                aggs = new {
-                    b = new {
-                        max = new {
-                            field = "tflbatchid"
-                        }
-                    },
-                    k = new {
-                        max = new {
-                            field = "tflkey"
-                        }
-                    }
-                },
-                size = 0
-            };
+      public IEnumerable<IRow> ReadKeys() {
+         throw new NotImplementedException();
+      }
 
-            _commonAggregations = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
+      public void Start() {
+         throw new NotImplementedException();
+      }
+
+      public void Write(IEnumerable<IRow> rows) {
+         throw new NotImplementedException();
+      }
+
+      private ElasticsearchResponse<DynamicResponse> GetAggregations() {
+
+         if (_commonAggregations != null) {
             return _commonAggregations;
-        }
+         }
 
-        public void Dispose() {
-        }
-    }
+         var body = new {
+            aggs = new {
+               b = new {
+                  max = new {
+                     field = "tflbatchid"
+                  }
+               },
+               k = new {
+                  max = new {
+                     field = "tflkey"
+                  }
+               }
+            },
+            size = 0
+         };
+
+         _commonAggregations = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
+         return _commonAggregations;
+      }
+
+      public void Dispose() {
+      }
+   }
 }

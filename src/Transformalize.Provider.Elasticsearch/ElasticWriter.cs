@@ -22,74 +22,90 @@ using System.Linq;
 using System.Text;
 using Elasticsearch.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Extensions;
 
 namespace Transformalize.Providers.Elasticsearch {
 
-    public class ElasticWriter : IWrite {
+   public class ElasticWriter : IWrite {
 
-        readonly OutputContext _context;
-        readonly IElasticLowLevelClient _client;
-        readonly string _prefix;
+      readonly OutputContext _context;
+      readonly IElasticLowLevelClient _client;
+      readonly string _prefix;
+      readonly AliasField[] _fields;
+      private readonly JsonSerializerSettings _settings;
 
-        public ElasticWriter(OutputContext context, IElasticLowLevelClient client) {
-            _context = context;
-            _client = client;
-            _prefix = "{\"index\": {\"_index\": \"" + context.Connection.Index + "\", \"_type\": \"" + context.Entity.Alias.ToLower() + "\", \"_id\": \"";
-        }
+      private class AliasField {
+         public string Alias { get; set; }
+         public Field Field { get; set; }
+      }
 
-        public void Write(IEnumerable<IRow> rows) {
-            var builder = new StringBuilder();
-            var fullCount = 0;
-            var batchCount = (uint)0;
+      public ElasticWriter(OutputContext context, IElasticLowLevelClient client) {
+         _context = context;
+         _client = client;
+         _prefix = "{\"index\": {\"_index\": \"" + context.Connection.Index + "\", \"_type\": \"" + context.Entity.Alias.ToLower() + "\", \"_id\": \"";
+         _fields = context.OutputFields.Select(f => new AliasField { Alias = f.Alias.ToLower(), Field = f }).ToArray();
+         _settings = new JsonSerializerSettings {
+            Formatting = Formatting.None,
+            ContractResolver = new DefaultContractResolver()
+         };
+      }
 
-            foreach (var part in rows.Partition(_context.Entity.InsertSize)) {
-                foreach (var row in part) {
-                    batchCount++;
-                    fullCount++;
-                    foreach (var field in _context.OutputFields) {
+      public void Write(IEnumerable<IRow> rows) {
+         var builder = new StringBuilder();
+         var fullCount = 0;
+         var batchCount = (uint)0;
 
-                        switch (field.Type) {
-                            case "guid":
-                                row[field] = ((Guid)row[field]).ToString();
-                                break;
-                            case "datetime":
-                                row[field] = ((DateTime)row[field]).ToString("o");
-                                break;
-                        }
-                        if (field.SearchType == "geo_point") {
-                            row[field] = new Dictionary<string, string> {
-                                { "text", row[field].ToString() },
-                                { "location", row[field].ToString() }
-                            };
-                        }
-                    }
+         foreach (var part in rows.Partition(_context.Entity.InsertSize)) {
+            foreach (var row in part) {
+               batchCount++;
+               fullCount++;
+               foreach (var af in _fields) {
 
-                    builder.Append(_prefix);
-                    foreach (var key in _context.OutputFields.Where(f => f.PrimaryKey)) {
-                        builder.Append(row[key]);
-                    }
-                    builder.AppendLine("\"}}");
-                    builder.AppendLine(JsonConvert.SerializeObject(_context.OutputFields.ToDictionary(f => f.Alias.ToLower(), f => row[f])));
-                }
-                var response = _client.Bulk<DynamicResponse>(builder.ToString(), nv => nv
-                    .AddQueryString("refresh", @"true")
-                );
-                if (response.Success) {
+                  switch (af.Field.Type) {
+                     case "guid":
+                        row[af.Field] = ((Guid)row[af.Field]).ToString();
+                        break;
+                     case "datetime":
+                        row[af.Field] = ((DateTime)row[af.Field]).ToString("o");
+                        break;
+                  }
+                  if (af.Field.SearchType == "geo_point") {
+                     var gp = row[af.Field].ToString();
+                     row[af.Field] = new Dictionary<string, string> {
+                        { "text", gp },
+                        { "location", gp }
+                     };
+                  }
+               }
 
-                    var count = batchCount;
-                    _context.Entity.Inserts += count;
-                    _context.Debug(() => $"{count} to output");
-                } else {
-                    _context.Error(response.OriginalException.Message);
-                }
-                builder.Clear();
-                batchCount = 0;
+               builder.Append(_prefix);
+               foreach (var key in _fields.Where(af => af.Field.PrimaryKey)) {
+                  builder.Append(row[key.Field]);
+               }
+               builder.AppendLine("\"}}");
+               builder.AppendLine(JsonConvert.SerializeObject(_fields.ToDictionary(af => af.Alias, af => row[af.Field]), _settings));
             }
 
-            _context.Info($"{fullCount} to output");
-        }
-    }
+            var response = _client.Bulk<DynamicResponse>(builder.ToString(), nv => nv
+                .AddQueryString("refresh", @"true")
+            );
+
+            if (response.Success) {
+               var count = batchCount;
+               _context.Entity.Inserts += count;
+               _context.Debug(() => $"{count} to output");
+            } else {
+               _context.Error(response.OriginalException.Message);
+            }
+            builder.Clear();
+            batchCount = 0;
+         }
+
+         _context.Info($"{fullCount} to output");
+      }
+   }
 }

@@ -55,9 +55,9 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
          //CONNECTIONS
          foreach (var connection in _process.Connections.Where(c => c.Provider == "elasticsearch")) {
 
-            if (connection.Servers.Any()) {
+            if (connection.Servers.Any(s=>s.Url != "None")) {
                var uris = new List<Uri>();
-               foreach (var server in connection.Servers) {
+               foreach (var server in connection.Servers.Where(s=>s.Url != "None")) {
                   server.Url = server.GetElasticUrl();
                   uris.Add(new Uri(server.Url));
                }
