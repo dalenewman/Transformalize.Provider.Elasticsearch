@@ -71,12 +71,16 @@ namespace Transformalize.Providers.Elasticsearch {
 
          var sb = new StringBuilder();
          var sw = new StringWriter(sb);
+         bool scroll = Scroll(from,size);
 
          using (var writer = new JsonTextWriter(sw)) {
             writer.WriteStartObject();
 
-            writer.WritePropertyName("from");
-            writer.WriteValue(from);
+            if (!scroll) {
+               writer.WritePropertyName("from");
+               writer.WriteValue(from);
+            }
+
             writer.WritePropertyName("size");
             writer.WriteValue(size);
             if (_version.Major >= 6) {  // for now, everything below expects to know total number of hits
@@ -279,7 +283,6 @@ namespace Transformalize.Providers.Elasticsearch {
                writer.WriteEndObject(); //aggs
             }
 
-
             writer.WriteEndObject();
             writer.Flush();
             return sb.ToString();
@@ -292,24 +295,22 @@ namespace Transformalize.Providers.Elasticsearch {
          ElasticsearchResponse<DynamicResponse> response;
          ElasticsearchDynamicValue hits;
 
-         var from = 1;
+         var from = 0;
          var size = 10;
          string body;
          bool warned = false;
 
-         
-
          if (_context.Entity.IsPageRequest()) {
             from = (_context.Entity.Page * _context.Entity.Size) - _context.Entity.Size;
-            body = WriteQuery(_fields, _readFrom, _context, from, _context.Entity.Size);
+            body = WriteQuery(_fields, _readFrom, _context, from: from, size: _context.Entity.Size);
          } else {
-            body = WriteQuery(_fields, _readFrom, _context, 0, 0);
+            body = WriteQuery(_fields, _readFrom, _context, from: 0, size: 0);
             response = _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
             if (response.Success) {
                hits = response.Body["hits"] as ElasticsearchDynamicValue;
-               if(hits != null && hits.HasValue) {
+               if (hits != null && hits.HasValue) {
                   var total = hits["total"];
-                  
+
                   try {
                      if (_version.Major >= 7) {  // version 7 changed total to an object with "value" and "relation" properties
                         size = Convert.ToInt32(total["value"].Value);
@@ -322,8 +323,7 @@ namespace Transformalize.Providers.Elasticsearch {
                      _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {_version}?");
                      _context.Error(ex, ex.Message);
                   }
-
-                  body = WriteQuery(_fields, _readFrom, _context, 0, size > _context.Entity.ReadSize ? _context.Entity.ReadSize : size);
+                  body = WriteQuery(_fields, _readFrom, _context, from: 0, size: size > _context.Entity.ReadSize ? _context.Entity.ReadSize : size);
                }
             }
          }
@@ -331,9 +331,9 @@ namespace Transformalize.Providers.Elasticsearch {
          _context.Debug(() => body);
          _context.Entity.Query = body;
 
-         response = from + size > _context.Entity.ReadSize
-             ? _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body, p => p.Scroll(TimeSpan.FromSeconds(30))) //_context.Connection.ScrollWindow
-             : _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
+         response = Scroll(from, size)
+            ? _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body, p => p.Scroll(TimeSpan.FromSeconds(10))) //_context.Connection.ScrollWindow
+            : _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
 
          if (!response.Success) {
             LogError(response);
@@ -447,6 +447,10 @@ namespace Transformalize.Providers.Elasticsearch {
          } while (response.Success && count < size);
 
          _client.ClearScroll<DynamicResponse>(new PostData<object>(new { scroll_id = scrolls.ToArray() }));
+      }
+
+      private static bool Scroll(int from, int size) {
+         return from + size > 10000;
       }
 
       private void LogError(IApiCallDetails response) {
