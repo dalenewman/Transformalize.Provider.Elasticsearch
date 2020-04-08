@@ -26,7 +26,7 @@ with Elasticsearch 4 through 7.  Be sure to set the version attribute accordingl
 </add>
 ```
 
-This writes 1000 rows of bogus data to an Elasticsearch 6 index.
+This writes 1000 rows of bogus data.
 
 ### Read Usage
 
@@ -52,7 +52,7 @@ This writes 1000 rows of bogus data to an Elasticsearch 6 index.
 </add>
 ```
 
-This reads 10 rows of bogus data from an Elasticsearch 6 index:
+This reads 10 rows of bogus data:
 
 <pre>
 <strong>identity,firstname,lastname,stars,reviewers</strong>
