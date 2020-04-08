@@ -1,8 +1,8 @@
 ### Overview
 
-This adds an `Elasticsearch` provider to Transformalize using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net).  It is a plug-in compatible with Transformalize 0.3.4-beta.
-
-Build the Autofac project and put it's output into Transformalize's *plugins* folder.
+This is an `Elasticsearch` provider for [Transformalize](https://github.com/dalenewman/Transformalize) 
+using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net) version 5.6.6.  It has been tested and works 
+with Elasticsearch 4 through 7.  Be sure to set the version attribute accordingly.  
 
 ### Write Usage
 
@@ -10,7 +10,7 @@ Build the Autofac project and put it's output into Transformalize's *plugins* fo
 <add name='TestProcess' mode='init'>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' index='bogus' port='9200' version='6' />
+    <add name='output' provider='elasticsearch' index='bogus' server='localhost' port='9200' version='7.6.2' />
   </connections>
   <entities>
     <add name='Contact' size='1000'>
@@ -69,5 +69,17 @@ This reads 10 rows of bogus data from an Elasticsearch 6 index:
 
 ### Notes
 
-- Tested with Elasticsearch 6.
 - Field names go into Elasticsearch as lower case.
+- The entity's name is used as the elasticsearch `_type` field when writing, and used as a filter when reading.   
+- If using a multi-node cluster, you may specify servers in your connection with `url` or (`name` and `port`) attributes:
+
+```xml
+<connections>
+   <add name="x" provider="elasticsearch" index="y" version="7.6.2">
+      <servers>
+         <add url="http://node1:9200" />
+         <add url="http://node2:9200" />
+      </servers>
+   </add>
+</connections>
+```
