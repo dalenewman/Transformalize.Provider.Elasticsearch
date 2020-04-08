@@ -35,7 +35,7 @@ using Transformalize.Providers.Elasticsearch;
 using Transformalize.Providers.Elasticsearch.Ext;
 using Transformalize.Providers.SqlServer;
 
-namespace IntegrationTests {
+namespace Test.Integration {
 
    [TestClass]
    public class NorthWindIntegrationSqlServerThenElastic {

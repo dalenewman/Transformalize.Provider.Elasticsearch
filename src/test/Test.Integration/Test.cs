@@ -26,7 +26,7 @@ using Transformalize.Providers.Bogus.Autofac;
 using Transformalize.Providers.Console;
 using Transformalize.Providers.Elasticsearch.Autofac;
 
-namespace IntegrationTests {
+namespace Test.Integration {
 
    [TestClass]
    public class Test {
