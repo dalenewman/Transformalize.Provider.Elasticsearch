@@ -1,26 +1,34 @@
 <?xml version="1.0"?>
 <package>
-  <metadata>
-    <id>Transformalize.Provider.Elasticsearch</id>
-    <version>0.6.20-beta</version>
-    <title>Transformalize Transform using Elasticsearch</title>
-    <authors>Dale Newman</authors>
-    <owners>Dale Newman</owners>
-    <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Elasticsearch</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using Elasticsearch</description>
-    <releaseNotes>dependency on newer transformalize that can leave strings as arrays</releaseNotes>
-    <copyright>Copyright 2018-2019</copyright>
-    <tags>etl</tags>
-    <dependencies>
-      <group targetFramework="net462">
-        <dependency id="Transformalize" version="0.6.20-beta" />
-        <dependency id="Elasticsearch.Net" version="5.6.4" />
-        <dependency id="Newtonsoft.Json" version="11.0.2" />
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="..\src\Transformalize.Provider.Elasticsearch\bin\Release\Transformalize.Provider.Elasticsearch.dll" target="lib\net462\Transformalize.Provider.Elasticsearch.dll" />
-  </files>
+   <metadata>
+      <id>Transformalize.Provider.Elasticsearch</id>
+      <version>0.6.28-beta</version>
+      <title>Transformalize Transform using Elasticsearch</title>
+      <authors>Dale Newman</authors>
+      <owners>Dale Newman</owners>
+      <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Elasticsearch</projectUrl>
+      <requireLicenseAcceptance>false</requireLicenseAcceptance>
+      <description>Transformalize Transform using Elasticsearch</description>
+      <releaseNotes>added .net standard 2.0 target</releaseNotes>
+      <copyright>Copyright 2018-2020</copyright>
+      <tags>etl</tags>
+      <dependencies>
+         <group targetFramework="net462">
+            <dependency id="Transformalize" version="0.6.28-beta" />
+            <dependency id="Elasticsearch.Net" version="5.6.6" />
+            <dependency id="Newtonsoft.Json" version="11.0.2" />
+         </group>
+         <group targetFramework="netstandard2.0">
+            <dependency id="Transformalize" version="0.6.28-beta" />
+            <dependency id="Elasticsearch.Net" version="5.6.6" />
+            <dependency id="Newtonsoft.Json" version="11.0.2" />
+            <dependency id="Microsoft.CSharp" version="4.7.0" />
+         </group>
+      </dependencies>
+   </metadata>
+   <files>
+      <file src="..\src\Transformalize.Provider.Elasticsearch\bin\Release\Transformalize.Provider.Elasticsearch.dll" target="lib\net462\Transformalize.Provider.Elasticsearch.dll" />
+      <file src="..\src\Transformalize.Provider.Elasticsearch.Standard.20\bin\Release\netstandard2.0\Transformalize.Provider.Elasticsearch.deps.json" target="lib\netstandard2.0\Transformalize.Provider.Elasticsearch.deps.json" />
+      <file src="..\src\Transformalize.Provider.Elasticsearch.Standard.20\bin\Release\netstandard2.0\Transformalize.Provider.Elasticsearch.dll" target="lib\netstandard2.0\Transformalize.Provider.Elasticsearch.dll" />
+   </files>
 </package>

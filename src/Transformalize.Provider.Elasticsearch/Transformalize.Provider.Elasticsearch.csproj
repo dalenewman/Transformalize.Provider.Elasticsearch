@@ -56,22 +56,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElasticEntityInitializer.cs" />
-    <Compile Include="ElasticInitializer.cs" />
-    <Compile Include="ElasticInputProvider.cs" />
-    <Compile Include="ElasticOutputController.cs" />
-    <Compile Include="ElasticOutputVersionDetector.cs" />
-    <Compile Include="ElasticPartialUpdater.cs" />
-    <Compile Include="ElasticQueryReader.cs" />
-    <Compile Include="ElasticReader.cs" />
-    <Compile Include="ElasticSchemaReader.cs" />
-    <Compile Include="ElasticWriter.cs" />
-    <Compile Include="Ext\ElasticExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ElasticVersionParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

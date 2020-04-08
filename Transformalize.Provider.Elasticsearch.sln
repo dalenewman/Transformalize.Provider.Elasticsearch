@@ -36,8 +36,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Ela
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration", "src\test\Test.Integration\Test.Integration.csproj", "{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Shared", "src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.shproj", "{67549944-8AFC-4C83-B5DA-E421F8E736B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{42e1dea8-c0b1-4adc-89a9-0b367ecd0df2}*SharedItemsImports = 5
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{4ed1e259-756a-40b8-9800-f563b59e0206}*SharedItemsImports = 4
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{67549944-8afc-4c83-b5da-e421f8e736b6}*SharedItemsImports = 13
 		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cad6f3ee-abbd-4853-9574-59af20278809}*SharedItemsImports = 13
 		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cd3477b9-14e5-4ea3-90b0-ca9299bcae73}*SharedItemsImports = 4
 		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{df60b8c2-d93e-436d-80f3-915859527e5c}*SharedItemsImports = 4
@@ -63,6 +70,10 @@ Global
 		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +85,8 @@ Global
 		{B0BC2A9C-9618-4E64-8DC5-2B8599A13BB7} = {C4563C88-9C80-4BD0-949E-AA64F111957E}
 		{DF60B8C2-D93E-436D-80F3-915859527E5C} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
 		{CAD6F3EE-ABBD-4853-9574-59AF20278809} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
+		{67549944-8AFC-4C83-B5DA-E421F8E736B6} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
+		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {960FC2FA-8CAD-47A3-8A4E-4173AE406E71}
