@@ -59,7 +59,7 @@ namespace IntegrationTests {
          Name = "output",
          Provider = "elasticsearch",
          Index = "northwind",
-         Url = "1514lt.scope-services.local:9201"
+         Url = "localhost:9200"
       };
 
       [TestMethod]

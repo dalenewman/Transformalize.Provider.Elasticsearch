@@ -39,7 +39,7 @@ namespace IntegrationTests {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' shards='3' replicas='0' port='9201' version='7.0.0' />
+    <add name='output' provider='elasticsearch' server='localhost' index='bogus' shards='3' replicas='0' port='9200' version='7.6.2' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>
@@ -71,7 +71,7 @@ namespace IntegrationTests {
       public void Read() {
          const string xml = @"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='1514lt.scope-services.local' index='bogus' port='9201' version='7.0.0' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.6.2' />
     <add name='output' provider='internal' />
   </connections>
   <entities>
