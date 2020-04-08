@@ -40,10 +40,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Ela
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Autofac.Standard.20", "src\Transformalize.Provider.Elasticsearch.Autofac.Standard.20\Transformalize.Provider.Elasticsearch.Autofac.Standard.20.csproj", "{647B1638-964D-4A07-B3DE-29DE452BB0BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{42e1dea8-c0b1-4adc-89a9-0b367ecd0df2}*SharedItemsImports = 5
 		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{4ed1e259-756a-40b8-9800-f563b59e0206}*SharedItemsImports = 4
+		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{647b1638-964d-4a07-b3de-29de452bb0be}*SharedItemsImports = 5
 		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{67549944-8afc-4c83-b5da-e421f8e736b6}*SharedItemsImports = 13
 		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cad6f3ee-abbd-4853-9574-59af20278809}*SharedItemsImports = 13
 		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cd3477b9-14e5-4ea3-90b0-ca9299bcae73}*SharedItemsImports = 4
@@ -74,6 +79,14 @@ Global
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +100,7 @@ Global
 		{CAD6F3EE-ABBD-4853-9574-59AF20278809} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
 		{67549944-8AFC-4C83-B5DA-E421F8E736B6} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
+		{647B1638-964D-4A07-B3DE-29DE452BB0BE} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {960FC2FA-8CAD-47A3-8A4E-4173AE406E71}
