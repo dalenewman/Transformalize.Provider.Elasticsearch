@@ -1,8 +1,12 @@
 ### Overview
 
 This is an `Elasticsearch` provider for [Transformalize](https://github.com/dalenewman/Transformalize) 
-using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net) version 5.6.6.  It has been tested and works 
-with Elasticsearch 4 through 7.  Be sure to set the version attribute accordingly.  
+using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net) version 5.6.6. 
+It has been tested and works with Elasticsearch 4 through 7.
+
+Note: Because this is based off version 5* of the elasticsearch client, you 
+need to have `_type` in your indexes.  The type is the 
+entity's name (or alias) value.
 
 ### Write Usage
 
@@ -33,7 +37,7 @@ This writes 1000 rows of bogus data.
 ```xml
 <add name='TestProcess' >
   <connections>
-    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='6' />
+    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='7.6.2' />
   </connections>
   <entities>
     <add name='contact' page='1' size='10'>
