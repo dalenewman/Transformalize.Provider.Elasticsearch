@@ -75,11 +75,7 @@ This reads 10 rows of bogus data:
 9,Willie,Heaney,5,342
 10,Sophie,Hand,2,176</pre>
 
-### Notes
-
-- Field names go into Elasticsearch as lower case.
-- The entity's name is used as the elasticsearch `_type` field when writing, and used as a filter when reading.   
-- If using a multi-node cluster, you may specify servers in your connection with `url` or (`name` and `port`) attributes:
+If using a multi-node cluster, you may specify servers in your connection with `url` or (`name` and `port`) attributes:
 
 ```xml
 <connections>
