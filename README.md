@@ -4,10 +4,14 @@ This is an `Elasticsearch` provider for [Transformalize](https://github.com/dale
 using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net) version 5.6.6. 
 It has been tested and works with Elasticsearch 4 through 7.
 
-Note: Because this is based off version 5* of the elasticsearch client, you 
-need to have `_type` in your indexes.  The type is the 
-entity's name (or alias) value.
-
+#### Current Issues/Constraints
+- Because this is using client v5+, you 
+need to have `_type` in your indexes. It is specified in 
+the entity's name (or alias).
+- Every identifier is lower-cased before going into Elasticsearch.
+- If you don't specify a three part version in your connection 
+you could default an incorrect version and experience issues.
+ 
 ### Write Usage
 
 ```xml
