@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8FE1844F-26A4-47BE-9507-F0333D42FABE}"
 	ProjectSection(SolutionItems) = preProject
+		nuget\myget.bat = nuget\myget.bat
 		nuget\nuget.bat = nuget\nuget.bat
 		nuget\Transformalize.Provider.Elasticsearch.Autofac.nuspec = nuget\Transformalize.Provider.Elasticsearch.Autofac.nuspec
 		nuget\Transformalize.Provider.Elasticsearch.Autofac.v3.nuspec = nuget\Transformalize.Provider.Elasticsearch.Autofac.v3.nuspec
@@ -38,11 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration", "src\tes
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Shared", "src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.shproj", "{67549944-8AFC-4C83-B5DA-E421F8E736B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Autofac.Standard.20", "src\Transformalize.Provider.Elasticsearch.Autofac.Standard.20\Transformalize.Provider.Elasticsearch.Autofac.Standard.20.csproj", "{647B1638-964D-4A07-B3DE-29DE452BB0BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Autofac.Standard.20", "src\Transformalize.Provider.Elasticsearch.Autofac.Standard.20\Transformalize.Provider.Elasticsearch.Autofac.Standard.20.csproj", "{647B1638-964D-4A07-B3DE-29DE452BB0BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

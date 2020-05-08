@@ -1,25 +1,27 @@
 <?xml version="1.0"?>
 <package>
-  <metadata>
-    <id>Transformalize.Provider.Elasticsearch.Autofac.v3</id>
-    <version>0.6.28-beta</version>
-    <title>Transformalize Transform using Elasticsearch Autofac Module</title>
-    <authors>Dale Newman</authors>
-    <owners>Dale Newman</owners>
-    <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Elasticsearch</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using Elasticsearch Autofac Module</description>
-    <releaseNotes>updated provider dependency</releaseNotes>
-    <copyright>Copyright 2018-2020</copyright>
-    <tags>etl</tags>
-    <dependencies>
-      <group targetFramework="net462">
-        <dependency id="Autofac" version="3.5.2" />
-        <dependency id="Transformalize.Provider.Elasticsearch" version="0.6.28-beta" />
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="..\src\Transformalize.Provider.Elasticsearch.Autofac.v3\bin\Release\Transformalize.Provider.Elasticsearch.Autofac.v3.dll" target="lib\net462\Transformalize.Provider.Elasticsearch.Autofac.v3.dll" />
-  </files>
+   <metadata>
+      <id>Transformalize.Provider.Elasticsearch.Autofac.v3</id>
+      <version>0.7.6-beta</version>
+      <title>Transformalize Transform using Elasticsearch Autofac Module</title>
+      <authors>Dale Newman</authors>
+      <owners>Dale Newman</owners>
+      <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Elasticsearch</projectUrl>
+      <license type="expression">Apache-2.0</license>
+      <requireLicenseAcceptance>false</requireLicenseAcceptance>
+      <description>Transformalize Transform using Elasticsearch Autofac Module</description>
+      <releaseNotes>updated provider dependency</releaseNotes>
+      <copyright>Copyright 2018-2020</copyright>
+      <tags>etl</tags>
+      <dependencies>
+         <group targetFramework="net462">
+            <dependency id="Autofac" version="3.5.2" />
+            <dependency id="Transformalize.Provider.Elasticsearch" version="0.7.6-beta" />
+         </group>
+      </dependencies>
+   </metadata>
+   <files>
+      <file src="..\src\Transformalize.Provider.Elasticsearch.Autofac.v3\bin\Debug\Transformalize.Provider.Elasticsearch.Autofac.v3.dll" target="lib\net462\Transformalize.Provider.Elasticsearch.Autofac.v3.dll" />
+      <file src="..\src\Transformalize.Provider.Elasticsearch.Autofac.v3\bin\Debug\Transformalize.Provider.Elasticsearch.Autofac.v3.pdb" target="lib\net462\Transformalize.Provider.Elasticsearch.Autofac.v3.pdb" />
+   </files>
 </package>
