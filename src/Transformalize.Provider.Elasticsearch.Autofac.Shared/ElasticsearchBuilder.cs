@@ -87,14 +87,14 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
             _builder.Register<ISchemaReader>(ctx => new ElasticSchemaReader(ctx.ResolveNamed<IConnectionContext>(connection.Key), ctx.ResolveNamed<IElasticLowLevelClient>(connection.Key))).Named<ISchemaReader>(connection.Key);
 
             // Entity Level Schema Readers
-            foreach (var entity in _process.Entities.Where(e => e.Connection == connection.Name)) {
+            foreach (var entity in _process.Entities.Where(e => e.Input == connection.Name)) {
                _builder.Register<ISchemaReader>(ctx => new ElasticSchemaReader(ctx.ResolveNamed<IConnectionContext>(entity.Key), ctx.ResolveNamed<IElasticLowLevelClient>(connection.Key))).Named<ISchemaReader>(entity.Key);
             }
 
          }
 
          // Entity Input
-         foreach (var entity in _process.Entities.Where(e => _process.Connections.First(c => c.Name == e.Connection).Provider == "elasticsearch")) {
+         foreach (var entity in _process.Entities.Where(e => _process.Connections.First(c => c.Name == e.Input).Provider == "elasticsearch")) {
 
             _builder.Register<IInputProvider>(ctx => {
                var input = ctx.ResolveNamed<InputContext>(entity.Key);
@@ -115,7 +115,7 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
          }
 
          // Entity Output
-         if (_process.Output().Provider == "elasticsearch") {
+         if (_process.GetOutputConnection().Provider == "elasticsearch") {
 
             // PROCESS OUTPUT CONTROLLER
             _builder.Register<IOutputController>(ctx => new NullOutputController()).As<IOutputController>();
@@ -191,7 +191,7 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
 
                      IRead output = new NullReader(context);
                      IDelete deleter = new NullDeleter(context);
-                     var outputConnection = _process.Output();
+                     var outputConnection = _process.GetOutputConnection();
                      var outputContext = ctx.ResolveNamed<OutputContext>(entity.Key);
 
                      switch (outputConnection.Provider) {
@@ -219,7 +219,7 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
                      handler.Register(TransformFactory.GetTransforms(ctx, context, primaryKey));
                      handler.Register(new StringTruncateTransfom(context, primaryKey));
 
-                     return new ParallelDeleteHandler(handler);
+                     return handler;
                   }).Named<IEntityDeleteHandler>(entity.Key);
                }
 
