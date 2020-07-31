@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using Elasticsearch.Net;
@@ -32,7 +33,8 @@ namespace Transformalize.Providers.Elasticsearch {
    public class ElasticReader : IRead {
 
       private readonly Regex _isQueryString = new Regex(@" OR | AND |\*|\?", RegexOptions.Compiled);
-
+      public const int ElasticsearchDefaultSizeLimit = 10000;
+      public const int DefaultSize = 100;
       private readonly IElasticLowLevelClient _client;
       private readonly IConnectionContext _context;
       private readonly Field[] _fields;
@@ -57,7 +59,13 @@ namespace Transformalize.Providers.Elasticsearch {
          _rowFactory = rowFactory;
          _readFrom = readFrom;
          _typeName = readFrom == ReadFrom.Input ? context.Entity.Name : context.Entity.Alias.ToLower();
-         _context.Entity.ReadSize = _context.Entity.ReadSize == 0 ? 10000 : _context.Entity.ReadSize;
+
+         _context.Entity.ReadSize = _context.Entity.ReadSize == 0 ? DefaultSize : _context.Entity.ReadSize;
+         
+         if(_context.Entity.ReadSize > ElasticsearchDefaultSizeLimit) {
+            _context.Warn("Elasticsearch's default size limit is 10000.  {0} may be too high.", _context.Entity.ReadSize);
+         }
+
          _version = ElasticVersionParser.ParseVersion(_context);
       }
 
@@ -65,13 +73,13 @@ namespace Transformalize.Providers.Elasticsearch {
           IEnumerable<Field> fields,
           ReadFrom readFrom,
           IContext context,
+          bool scroll,
           int from = 0,
           int size = 10
           ) {
 
          var sb = new StringBuilder();
          var sw = new StringWriter(sb);
-         bool scroll = Scroll(from,size);
 
          using (var writer = new JsonTextWriter(sw)) {
             writer.WriteStartObject();
@@ -300,11 +308,13 @@ namespace Transformalize.Providers.Elasticsearch {
          string body;
          bool warned = false;
 
-         if (_context.Entity.IsPageRequest()) {
+         var scroll = !_context.Entity.IsPageRequest();
+
+         if (!scroll) {
             from = (_context.Entity.Page * _context.Entity.Size) - _context.Entity.Size;
-            body = WriteQuery(_fields, _readFrom, _context, from: from, size: _context.Entity.Size);
+            body = WriteQuery(_fields, _readFrom, _context, scroll:false, from: from, size: _context.Entity.Size);
          } else {
-            body = WriteQuery(_fields, _readFrom, _context, from: 0, size: 0);
+            body = WriteQuery(_fields, _readFrom, _context, scroll:false, from: 0, size: 0);
             response = _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
             if (response.Success) {
                hits = response.Body["hits"] as ElasticsearchDynamicValue;
@@ -323,7 +333,7 @@ namespace Transformalize.Providers.Elasticsearch {
                      _context.Warn($"Could not get total number of matching documents from the elasticsearch response.  Are you sure you using version {_version}?");
                      _context.Error(ex, ex.Message);
                   }
-                  body = WriteQuery(_fields, _readFrom, _context, from: 0, size: size > _context.Entity.ReadSize ? _context.Entity.ReadSize : size);
+                  body = WriteQuery(_fields, _readFrom, _context, scroll:true, from: 0, size: size > ElasticsearchDefaultSizeLimit ? DefaultSize : size);
                }
             }
          }
@@ -331,8 +341,8 @@ namespace Transformalize.Providers.Elasticsearch {
          _context.Debug(() => body);
          _context.Entity.Query = body;
 
-         response = Scroll(from, size)
-            ? _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body, p => p.Scroll(TimeSpan.FromSeconds(10))) //_context.Connection.ScrollWindow
+         response = scroll
+            ? _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body, p => p.AddQueryString("scroll",_context.Connection.Scroll))
             : _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
 
          if (!response.Success) {
@@ -428,7 +438,7 @@ namespace Transformalize.Providers.Elasticsearch {
          do {
             var scrollId = response.Body["_scroll_id"].Value;
             scrolls.Add(scrollId);
-            response = _client.Scroll<DynamicResponse>(new PostData<object>(new { scroll = "1m", scroll_id = scrollId }));
+            response = _client.Scroll<DynamicResponse>(new PostData<object>(new { scroll = _context.Connection.Scroll, scroll_id = scrollId }));
             if (response.Success) {
                docs = (IList<object>)response.Body["hits"]["hits"].Value;
                foreach (var d in docs) {
@@ -450,7 +460,7 @@ namespace Transformalize.Providers.Elasticsearch {
       }
 
       private static bool Scroll(int from, int size) {
-         return from + size > 10000;
+         return from + size > ElasticsearchDefaultSizeLimit;
       }
 
       private void LogError(IApiCallDetails response) {

@@ -23,7 +23,7 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
 
    public class ElasticsearchModule : Module {
 
-      private Process _process;
+      private readonly Process _process;
 
       public ElasticsearchModule() { }
       public ElasticsearchModule(Process process) {
