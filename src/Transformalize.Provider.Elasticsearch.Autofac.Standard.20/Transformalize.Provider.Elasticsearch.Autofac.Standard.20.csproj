@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Elasticsearch.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.Elasticsearch.Autofac</AssemblyName>
-    <Version>0.8.22-beta</Version>
+    <Version>0.8.26-beta</Version>
   </PropertyGroup>
   <Import Project="..\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems" Label="Shared" />
   <ItemGroup>
