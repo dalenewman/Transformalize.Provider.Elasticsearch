@@ -39,7 +39,7 @@ namespace Test.Integration {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' server='localhost' index='bogus' shards='1' replicas='0' port='9200' version='7.9.3' />
+    <add name='output' provider='elasticsearch' server='localhost' index='bogus' shards='1' replicas='0' port='9200' version='7.6.2' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>
@@ -71,7 +71,7 @@ namespace Test.Integration {
       public void Read() {
          const string xml = @"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.6.2' scroll='30s' />
     <add name='output' provider='internal' />
   </connections>
   <entities>
@@ -104,7 +104,7 @@ namespace Test.Integration {
       public void ReadPage1() {
          const string xml = @"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.6.2' scroll='30s' />
   </connections>
   <entities>
     <add name='contact' page='1' size='10'>
@@ -141,7 +141,7 @@ namespace Test.Integration {
       public void ReadPage2() {
          const string xml = @"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.6.2' scroll='30s' />
   </connections>
   <entities>
     <add name='contact' page='2' size='5'>

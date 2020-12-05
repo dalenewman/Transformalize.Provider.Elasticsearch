@@ -18,7 +18,7 @@ you could default an incorrect version and experience issues.
 <add name='TestProcess' mode='init'>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' index='bogus' server='localhost' port='9200' version='7.6.2' />
+    <add name='output' provider='elasticsearch' index='bogus' server='localhost' port='9200' version='7.9.3' />
   </connections>
   <entities>
     <add name='Contact' size='1000'>
@@ -41,7 +41,7 @@ This writes 1000 rows of bogus data.
 ```xml
 <add name='TestProcess' >
   <connections>
-    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='7.6.2' />
+    <add name='input' provider='elasticsearch' index='bogus' port='9200' version='7.9.3' />
   </connections>
   <entities>
     <add name='contact' page='1' size='10'>
@@ -79,7 +79,7 @@ If using a multi-node cluster, you may specify servers in your connection with `
 
 ```xml
 <connections>
-   <add name="x" provider="elasticsearch" index="y" version="7.6.2">
+   <add name="x" provider="elasticsearch" index="y" version="7.9.3">
       <servers>
          <add url="http://node1:9200" />
          <add url="http://node2:9200" />

@@ -35,8 +35,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provider.Autofac", "Provide
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Autofac.Shared", "src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.shproj", "{CAD6F3EE-ABBD-4853-9574-59AF20278809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration", "src\test\Test.Integration\Test.Integration.csproj", "{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Shared", "src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.shproj", "{67549944-8AFC-4C83-B5DA-E421F8E736B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
@@ -44,6 +42,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Autofac.Standard.20", "src\Transformalize.Provider.Elasticsearch.Autofac.Standard.20\Transformalize.Provider.Elasticsearch.Autofac.Standard.20.csproj", "{647B1638-964D-4A07-B3DE-29DE452BB0BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration", "src\test\Test.Integration\Test.Integration.csproj", "{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -72,10 +72,6 @@ Global
 		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C7BA733-5FDE-4FD1-9601-352A5FA72F32}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -88,6 +84,10 @@ Global
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

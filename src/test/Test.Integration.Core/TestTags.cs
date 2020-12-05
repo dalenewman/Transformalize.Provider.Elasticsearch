@@ -39,7 +39,7 @@ namespace Test.Integration.Core {
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' server='localhost' index='bogus-tags' shards='3' replicas='0' port='9200' version='7.6.2' />
+    <add name='output' provider='elasticsearch' server='localhost' index='bogus-tags' shards='3' replicas='0' port='9200' version='7.9.3' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>

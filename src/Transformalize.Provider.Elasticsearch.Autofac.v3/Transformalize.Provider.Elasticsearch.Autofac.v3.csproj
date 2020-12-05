@@ -46,8 +46,8 @@
     <Reference Include="CfgNet, Version=0.13.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Cfg-NET.0.13.2-beta\lib\net462\CfgNet.dll</HintPath>
     </Reference>
-    <Reference Include="DateMath, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DateMath.1.1.0\lib\net462\DateMath.dll</HintPath>
+    <Reference Include="DateMath, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DateMath.1.2.0\lib\net462\DateMath.dll</HintPath>
     </Reference>
     <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Elasticsearch.Net.5.6.6\lib\net461\Elasticsearch.Net.dll</HintPath>
@@ -63,11 +63,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Transformalize, Version=0.8.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.8.26-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.8.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.8.29-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Container.Autofac.v3, Version=0.8.23.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Container.Autofac.v3.0.8.23-beta\lib\net462\Transformalize.Container.Autofac.v3.dll</HintPath>
+    <Reference Include="Transformalize.Container.Autofac.v3, Version=0.8.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Container.Autofac.v3.0.8.29-beta\lib\net462\Transformalize.Container.Autofac.v3.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
