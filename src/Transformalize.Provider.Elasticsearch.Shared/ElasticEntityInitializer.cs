@@ -115,7 +115,7 @@ namespace Transformalize.Providers.Elasticsearch {
 
          DynamicResponse elasticResponse;
 
-         elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, json);
+         elasticResponse = _client.Indices.PutMapping<DynamicResponse>(_context.Connection.Index, json);
 
          var response = new ActionResponse(
             elasticResponse.HttpStatusCode ?? 500,

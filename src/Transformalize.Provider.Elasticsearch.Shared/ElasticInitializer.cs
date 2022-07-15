@@ -35,12 +35,12 @@ namespace Transformalize.Providers.Elasticsearch {
 
       public ActionResponse Execute() {
 
-         if (_client.IndicesExists<DynamicResponse>(_context.Connection.Index).HttpStatusCode == 200) {
-            _client.IndicesDelete<VoidResponse>(_context.Connection.Index);
+         if (_client.Indices.Exists<DynamicResponse>(_context.Connection.Index).HttpStatusCode == 200) {
+            _client.Indices.Delete<VoidResponse>(_context.Connection.Index);
          }
 
          var settings = new JObject { { "settings", new JObject { { "number_of_shards", _context.Connection.Shards }, { "number_of_replicas", _context.Connection.Replicas } } } };
-         var elasticResponse = _client.IndicesCreate<DynamicResponse>(_context.Connection.Index, settings.ToString());
+         var elasticResponse = _client.Indices.Create<DynamicResponse>(_context.Connection.Index, settings.ToString());
 
          var response = new ActionResponse(
             elasticResponse.HttpStatusCode ?? 500,

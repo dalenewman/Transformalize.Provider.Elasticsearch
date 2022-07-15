@@ -62,7 +62,7 @@ namespace Transformalize.Providers.Elasticsearch {
             size = 0
          };
 
-         var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), PostData.String(JsonConvert.SerializeObject(body)));
+         var result = _client.Search<DynamicResponse>(_context.Connection.Index, PostData.String(JsonConvert.SerializeObject(body)));
          dynamic value = null;
          if (result.Success) {
             try {

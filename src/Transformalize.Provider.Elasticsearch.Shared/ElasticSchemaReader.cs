@@ -39,10 +39,10 @@ namespace Transformalize.Providers.Elasticsearch {
          var version = ElasticVersionParser.ParseVersion(_input);
          DynamicResponse response;
 
-         response = _client.IndicesGetMapping<DynamicResponse>(_index, name);
+         response = _client.Indices.GetMapping<DynamicResponse>(_index);
 
          if (response.Success) {
-            var properties = response.Body[_index]["mappings"][name]["properties"] as ElasticsearchDynamicValue;
+            var properties = response.Body[_index]["mappings"][name]["properties"];
             if (properties != null && properties.HasValue) {
                return PropertiesToFields(name, properties.Value as IDictionary<string, object>);
             }
@@ -80,10 +80,10 @@ namespace Transformalize.Providers.Elasticsearch {
          var version = ElasticVersionParser.ParseVersion(_input);
          DynamicResponse response;
 
-         response = _client.IndicesGetMapping<DynamicResponse>(_index);
+         response = _client.Indices.GetMapping<DynamicResponse>(_index);
 
          if (response.Success) {
-            var mappings = response.Body[_index]["mappings"] as ElasticsearchDynamicValue;
+            var mappings = response.Body[_index]["mappings"];
             if (mappings != null && mappings.HasValue) {
                var types = mappings.Value as IDictionary<string, object>;
                if (types != null) {

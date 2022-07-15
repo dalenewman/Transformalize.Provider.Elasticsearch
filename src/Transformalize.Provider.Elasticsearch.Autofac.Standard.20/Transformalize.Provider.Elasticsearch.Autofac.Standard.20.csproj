@@ -9,8 +9,8 @@
   </PropertyGroup>
   <Import Project="..\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems" Label="Shared" />
   <ItemGroup>
-    <PackageReference Include="Elasticsearch.Net" Version="6.8.11" />
-    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.0-beta" />
+    <PackageReference Include="Elasticsearch.Net" Version="7.17.4" />
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.2-beta" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.Elasticsearch\Transformalize.Provider.Elasticsearch.csproj" />

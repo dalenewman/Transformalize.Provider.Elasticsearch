@@ -35,7 +35,8 @@ namespace Transformalize.Providers.Elasticsearch.Ext {
             if (!string.IsNullOrEmpty(cn.Url)) {
                 return cn.Url;
             }
-            var builder = new UriBuilder(cn.Server.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? cn.Server : "http://" + cn.Server);
+            
+            var builder = new UriBuilder(cn.Server.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? cn.Server : $"http{(cn.UseSsl ? "s" : "")}://" + cn.Server);
             if (cn.Port > 0) {
                 builder.Port = cn.Port;
             }

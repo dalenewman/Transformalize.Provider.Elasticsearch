@@ -45,14 +45,14 @@ namespace Transformalize.Providers.Elasticsearch {
             // Could probably do bulk updates with partition and bulk operation
             foreach (var row in rows) {
                 var id = string.Concat(_context.OutputFields.Where(f => f.PrimaryKey).Select(f => row[f]));
-                _client.Update<VoidResponse>(_index, "_doc", id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
+                _client.Update<VoidResponse>(_index, id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
             }
         }
 
         public void Write(IEnumerable<IRow> rows) {
             foreach (var row in rows) {
                 var id = string.Concat(_context.OutputFields.Where(f => f.PrimaryKey).Select(f => row[f]));
-                _client.Update<VoidResponse>(_index, "_doc", id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
+                _client.Update<VoidResponse>(_index, id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
             }
         }
     }

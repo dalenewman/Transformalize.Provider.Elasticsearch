@@ -31,15 +31,32 @@ namespace Test.Integration.Core {
    [TestClass]
    public class Test {
 
+      // note: these credentials are specific to the container running on dale's computer
+      private static string Version = "8.3.2";
+      private static string User = "elastic";
+      private static string Password = "Zgf4+hQ7+dmCnIUpk6Wr";  
+      private static string Fingerprint = "37:84:43:71:D1:57:AE:34:9D:FE:FB:2A:A5:E2:DC:65:7B:62:16:9C:8E:E3:58:DB:30:EF:CD:9E:06:85:7D:03";
+
       [TestMethod]
       public void Write() {
-         const string xml = @"<add name='TestProcess' mode='init'>
+         string xml = $@"<add name='TestProcess' mode='init'>
   <parameters>
     <add name='Size' type='int' value='1000' />
   </parameters>
   <connections>
     <add name='input' provider='bogus' seed='1' />
-    <add name='output' provider='elasticsearch' server='localhost' index='bogus' shards='3' replicas='0' port='9200' version='7.9.3' />
+    <add name='output' 
+         provider='elasticsearch' 
+         server='localhost' 
+         index='bogus' 
+         shards='3' 
+         replicas='0' 
+         port='9200'
+         useSsl='true'
+         user='{User}'
+         password='{Password}'
+         certificate-fingerprint='{Fingerprint}'
+         version='{Version}' />
   </connections>
   <entities>
     <add name='Contact' size='@[Size]'>
@@ -69,9 +86,9 @@ namespace Test.Integration.Core {
 
       [TestMethod]
       public void Read() {
-         const string xml = @"<add name='TestProcess'>
+         string xml = $@"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' useSsl='true' version='{Version}' user='{User}' password='{Password}' certificate-fingerprint='{Fingerprint}' />
     <add name='output' provider='internal' />
   </connections>
   <entities>
@@ -102,9 +119,9 @@ namespace Test.Integration.Core {
 
       [TestMethod]
       public void ReadPage1() {
-         const string xml = @"<add name='TestProcess'>
+         string xml = $@"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='{Version}' useSsl='true' user='{User}' password='{Password}' certificate-fingerprint='{Fingerprint}' scroll='30s' />
   </connections>
   <entities>
     <add name='contact' page='1' size='10'>
@@ -139,9 +156,9 @@ namespace Test.Integration.Core {
 
       [TestMethod]
       public void ReadPage2() {
-         const string xml = @"<add name='TestProcess'>
+         string xml = $@"<add name='TestProcess'>
   <connections>
-    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='{Version}' useSsl='true' user='{User}' password='{Password}' certificate-fingerprint='{Fingerprint}' scroll='30s' />
   </connections>
   <entities>
     <add name='contact' page='2' size='5'>

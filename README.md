@@ -1,16 +1,22 @@
-### Overview
+﻿### Overview
 
 This is an `Elasticsearch` provider for [Transformalize](https://github.com/dalenewman/Transformalize) 
-using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net) version 5.6.6. 
-It has been tested and works with Elasticsearch 4 through 7.
+using [Elasticsearch.Net](https://github.com/elastic/elasticsearch-net). 
+It has been tested and works with Elasticsearch 7 through 8.
+
+#### 🎱 Elasticsearch v8 Changes
+
+Security is on by default in version 8.  This includes user, password, and SSL.  Therefore, you may need to add 
+these properties to your connection:
+
+- `use-ssl`: true|false and is used to build the URL if you are using `server` instead of `url`.
+- `certificate-fingerprint`: output on first ES start.
+- `user`: output on first ES start (defaults to _elastic_)
+- `password`: output on first ES start
 
 #### Current Issues/Constraints
-- Because this is using client v5+, you 
-need to have `_type` in your indexes. It is specified in 
-the entity's name (or alias).
 - Every identifier is lower-cased before going into Elasticsearch.
-- If you don't specify a three part version in your connection 
-you could default an incorrect version and experience issues.
+- If you don't specify a three part version in your connection you could default an incorrect version and experience issues.
  
 ### Write Usage
 
@@ -19,6 +25,9 @@ you could default an incorrect version and experience issues.
   <connections>
     <add name='input' provider='bogus' seed='1' />
     <add name='output' provider='elasticsearch' index='bogus' server='localhost' port='9200' version='7.9.3' />
+    <!-- example 8
+    <add name='output' provider='elasticsearch' index='bogus' server='localhost' port='9200' version='8.3.2' user='elastic' password='Zgf4+hQ7+dmCnIUpk6Wr' use-ssl='true' certificate-fingerprint='37:84:43:71:D1:57:AE:34:9D:FE:FB:2A:A5:E2:DC:65:7B:62:16:9C:8E:E3:58:DB:30:EF:CD:9E:06:85:7D:03' />
+    -->
   </connections>
   <entities>
     <add name='Contact' size='1000'>

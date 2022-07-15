@@ -301,7 +301,7 @@ namespace Transformalize.Providers.Elasticsearch {
       public IEnumerable<IRow> Read() {
 
          DynamicResponse response;
-         ElasticsearchDynamicValue hits;
+         dynamic hits;
 
          var from = 0;
          var size = 10;
@@ -317,7 +317,7 @@ namespace Transformalize.Providers.Elasticsearch {
             body = WriteQuery(_fields, _readFrom, _context, scroll:false, from: 0, size: 0);
             response = _client.Search<DynamicResponse>(_context.Connection.Index, PostData.String(body));
             if (response.Success) {
-               hits = response.Body["hits"] as ElasticsearchDynamicValue;
+               hits = response.Body["hits"];
                if (hits != null && hits.HasValue) {
                   var total = hits["total"];
 
@@ -367,7 +367,7 @@ namespace Transformalize.Providers.Elasticsearch {
             }
          }
 
-         hits = response.Body["hits"]["hits"] as ElasticsearchDynamicValue;
+         hits = response.Body["hits"]["hits"];
 
          if (hits == null || !hits.HasValue) {
             _context.Warn("No hits from elasticsearch");
@@ -413,7 +413,7 @@ namespace Transformalize.Providers.Elasticsearch {
          // get this from first search response (maybe), unless you have to aggregate it from all...
          foreach (var filter in _context.Entity.Filter.Where(f => f.Type == "facet" && !string.IsNullOrEmpty(f.Map))) {
             var map = _context.Process.Maps.First(m => m.Name == filter.Map);
-            var buckets = response.Body["aggregations"][filter.Key]["buckets"] as ElasticsearchDynamicValue;
+            var buckets = response.Body["aggregations"][filter.Key]["buckets"];
             if (buckets == null || !buckets.HasValue)
                continue;
 

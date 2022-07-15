@@ -98,7 +98,7 @@ namespace Test.Integration.Core {
             }
          }
 
-         Assert.AreEqual(2155, client.Count<DynamicResponse>("northwind", "star", "{\"query\" : { \"match_all\" : { }}}").Body["count"].Value);
+         Assert.AreEqual(2155, client.Count<DynamicResponse>("northwind", PostData.String("{\"query\" : { \"match_all\" : { }}}")).Body["count"].Value);
 
          // FIRST DELTA, NO CHANGES
          using (var outer = new ConfigurationContainer().CreateScope(ElasticTestFile, logger)) {
@@ -109,7 +109,7 @@ namespace Test.Integration.Core {
             }
          }
 
-         Assert.AreEqual(2155, client.Count<DynamicResponse>("northwind", "star", "{\"query\" : { \"match_all\" : { }}}").Body["count"].Value);
+         Assert.AreEqual(2155, client.Count<DynamicResponse>("northwind", PostData.String("{\"query\" : { \"match_all\" : { }}}")).Body["count"].Value);
 
          // CHANGE 2 FIELDS IN 1 RECORD IN MASTER TABLE THAT WILL CAUSE CALCULATED FIELD TO BE UPDATED TOO 
          using (var cn = new SqlServerConnectionFactory(InputConnection).GetConnection()) {
@@ -145,8 +145,7 @@ namespace Test.Integration.Core {
          }
 
          var response = client.Search<DynamicResponse>(
-             "northwind",
-             "star", @"{
+             "northwind", PostData.String(@"{
    ""query"" : {
       ""constant_score"" : { 
          ""filter"" : {
@@ -159,9 +158,9 @@ namespace Test.Integration.Core {
          }
       }
    }
-}");
+}"));
 
-         var hits = (response.Body["hits"]["hits"] as ElasticsearchDynamicValue).Value as IList<object>;
+         var hits = response.Body["hits"]["hits"].Value as IList<object>;
          var hit = hits[0] as IDictionary<string, object>;
          var source = hit["_source"] as IDictionary<string, object>;
 
@@ -202,8 +201,7 @@ namespace Test.Integration.Core {
 
          response = client.Search<DynamicResponse>(
              "northwind",
-             "star",
-             @"{
+             PostData.String(@"{
    ""query"" : {
       ""constant_score"" : { 
          ""filter"" : {
@@ -215,9 +213,9 @@ namespace Test.Integration.Core {
          }
       }
    }
-}");
+}"));
 
-         hits = (response.Body["hits"]["hits"] as ElasticsearchDynamicValue).Value as IList<object>;
+         hits = response.Body["hits"]["hits"].Value as IList<object>;
          hit = hits[0] as IDictionary<string, object>;
          source = hit["_source"] as IDictionary<string, object>;
 

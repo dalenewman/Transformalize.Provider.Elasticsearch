@@ -72,15 +72,21 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
             _builder.Register(ctx => {
 
                var pool = ctx.ResolveNamed<IConnectionPool>(connection.Key);
-               var settings = new ConnectionConfiguration(pool); // .EnableApiVersioningHeader();  
+               var settings = new ConnectionConfiguration(pool);
+
+               var version = ElasticVersionParser.ParseVersion(ctx.ResolveNamed<IConnectionContext>(connection.Key));
 
                if (!string.IsNullOrEmpty(connection.User)) {
                   settings = settings.BasicAuthentication(connection.User, connection.Password);
                }
 
-               //if (!string.IsNullOrEmpty(connection.CertificateFingerprint)) {
-               //   settings = settings.CertificateFingerprint(connection.CertificateFingerprint);
-               //}
+               if(version.Major > 7 || (version.Major == 7 && version.Minor >= 11)) {
+                  settings.EnableApiVersioningHeader(true);
+               }
+
+               if (!string.IsNullOrEmpty(connection.CertificateFingerprint)) {
+                  settings = settings.CertificateFingerprint(connection.CertificateFingerprint);
+               }
 
                if (_process.Mode != "init" && connection.RequestTimeout >= 0) {
                   settings = settings.RequestTimeout(new TimeSpan(0, 0, 0, connection.RequestTimeout * 1000));
