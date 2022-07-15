@@ -100,5 +100,79 @@ namespace Test.Integration.Core {
          }
       }
 
+      [TestMethod]
+      public void ReadPage1() {
+         const string xml = @"<add name='TestProcess'>
+  <connections>
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+  </connections>
+  <entities>
+    <add name='contact' page='1' size='10'>
+      <order>
+         <add field='identity' />
+      </order>
+      <fields>
+        <add name='identity' type='int' />
+        <add name='firstname' />
+        <add name='lastname' />
+        <add name='stars' type='byte' />
+        <add name='reviewers' type='int' />
+        <add name='names' />
+      </fields>
+    </add>
+  </entities>
+</add>";
+         var logger = new ConsoleLogger(LogLevel.Debug);
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+            var process = outer.Resolve<Process>();
+            using (var inner = new Container(new ElasticsearchModule()).CreateScope(process, logger)) {
+
+               var controller = inner.Resolve<IProcessController>();
+               controller.Execute();
+               var rows = process.Entities.First().Rows;
+
+               Assert.AreEqual(10, rows.Count);
+               Assert.AreEqual("Justin", rows[0]["firstname"]);
+            }
+         }
+      }
+
+      [TestMethod]
+      public void ReadPage2() {
+         const string xml = @"<add name='TestProcess'>
+  <connections>
+    <add name='input' provider='elasticsearch' server='localhost' index='bogus' port='9200' version='7.9.3' scroll='30s' />
+  </connections>
+  <entities>
+    <add name='contact' page='2' size='5'>
+      <order>
+         <add field='identity' />
+      </order>
+      <fields>
+        <add name='identity' type='int' />
+        <add name='firstname' />
+        <add name='lastname' />
+        <add name='stars' type='byte' />
+        <add name='reviewers' type='int' />
+        <add name='names' />
+      </fields>
+    </add>
+  </entities>
+</add>";
+         var logger = new ConsoleLogger(LogLevel.Debug);
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+            var process = outer.Resolve<Process>();
+            using (var inner = new Container(new ElasticsearchModule()).CreateScope(process, logger)) {
+
+               var controller = inner.Resolve<IProcessController>();
+               controller.Execute();
+               var rows = process.Entities.First().Rows;
+
+               Assert.AreEqual(5, rows.Count);
+               Assert.AreEqual("Mitchell", rows[0]["firstname"]);
+            }
+         }
+      }
+
    }
 }

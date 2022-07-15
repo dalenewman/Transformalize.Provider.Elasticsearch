@@ -41,7 +41,7 @@ namespace Transformalize.Providers.Elasticsearch {
       private readonly string[] _fieldNames;
       private readonly IRowFactory _rowFactory;
       private readonly ReadFrom _readFrom;
-      private readonly string _typeName;
+      // private readonly string _typeName;
       private readonly Version _version;
 
       public ElasticReader(
@@ -58,7 +58,7 @@ namespace Transformalize.Providers.Elasticsearch {
          _client = client;
          _rowFactory = rowFactory;
          _readFrom = readFrom;
-         _typeName = readFrom == ReadFrom.Input ? context.Entity.Name : context.Entity.Alias.ToLower();
+         // _typeName = readFrom == ReadFrom.Input ? context.Entity.Name : context.Entity.Alias.ToLower();
 
          _context.Entity.ReadSize = _context.Entity.ReadSize == 0 ? DefaultSize : _context.Entity.ReadSize;
          
@@ -300,7 +300,7 @@ namespace Transformalize.Providers.Elasticsearch {
 
       public IEnumerable<IRow> Read() {
 
-         ElasticsearchResponse<DynamicResponse> response;
+         DynamicResponse response;
          ElasticsearchDynamicValue hits;
 
          var from = 0;
@@ -315,7 +315,7 @@ namespace Transformalize.Providers.Elasticsearch {
             body = WriteQuery(_fields, _readFrom, _context, scroll:false, from: from, size: _context.Entity.Size);
          } else {
             body = WriteQuery(_fields, _readFrom, _context, scroll:false, from: 0, size: 0);
-            response = _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
+            response = _client.Search<DynamicResponse>(_context.Connection.Index, PostData.String(body));
             if (response.Success) {
                hits = response.Body["hits"] as ElasticsearchDynamicValue;
                if (hits != null && hits.HasValue) {
@@ -341,9 +341,12 @@ namespace Transformalize.Providers.Elasticsearch {
          _context.Debug(() => body);
          _context.Entity.Query = body;
 
+         var parameters = new SearchRequestParameters();
+         parameters.SetQueryString("scroll", _context.Connection.Scroll);
+
          response = scroll
-            ? _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body, p => p.AddQueryString("scroll",_context.Connection.Scroll))
-            : _client.Search<DynamicResponse>(_context.Connection.Index, _typeName, body);
+            ? _client.Search<DynamicResponse>(_context.Connection.Index, body, parameters)
+            : _client.Search<DynamicResponse>(_context.Connection.Index, body);
 
          if (!response.Success) {
             LogError(response);
@@ -429,7 +432,7 @@ namespace Transformalize.Providers.Elasticsearch {
             yield break;
 
          if (size == count) {
-            _client.ClearScroll<DynamicResponse>(new PostData<object>(new { scroll_id = response.Body["_scroll_id"].Value }));
+            _client.ClearScroll<DynamicResponse>(PostData.String(JsonConvert.SerializeObject(new { scroll_id = response.Body["_scroll_id"].Value })));
             yield break;
          }
 
@@ -438,7 +441,7 @@ namespace Transformalize.Providers.Elasticsearch {
          do {
             var scrollId = response.Body["_scroll_id"].Value;
             scrolls.Add(scrollId);
-            response = _client.Scroll<DynamicResponse>(new PostData<object>(new { scroll = _context.Connection.Scroll, scroll_id = scrollId }));
+            response = _client.Scroll<DynamicResponse>(PostData.String(JsonConvert.SerializeObject(new { scroll = _context.Connection.Scroll, scroll_id = scrollId })));
             if (response.Success) {
                docs = (IList<object>)response.Body["hits"]["hits"].Value;
                foreach (var d in docs) {
@@ -456,7 +459,7 @@ namespace Transformalize.Providers.Elasticsearch {
             }
          } while (response.Success && count < size);
 
-         _client.ClearScroll<DynamicResponse>(new PostData<object>(new { scroll_id = scrolls.ToArray() }));
+         _client.ClearScroll<DynamicResponse>(PostData.String(JsonConvert.SerializeObject(new { scroll_id = scrolls.ToArray() })));
       }
 
       private static bool Scroll(int from, int size) {
@@ -464,13 +467,7 @@ namespace Transformalize.Providers.Elasticsearch {
       }
 
       private void LogError(IApiCallDetails response) {
-         if (response.ServerError?.Error?.RootCause != null) {
-            foreach (var error in response.ServerError.Error.RootCause) {
-               _context.Error(error.Reason.Replace("{", "{{").Replace("}", "}}"));
-            }
-         } else {
-            _context.Error(response.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
-         }
+         _context.Error(response.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
       }
    }
 }

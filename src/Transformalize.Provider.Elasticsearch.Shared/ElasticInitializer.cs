@@ -44,7 +44,7 @@ namespace Transformalize.Providers.Elasticsearch {
 
          var response = new ActionResponse(
             elasticResponse.HttpStatusCode ?? 500,
-            elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+            elasticResponse.OriginalException == null ? string.Empty : elasticResponse.DebugInformation.Replace("{", "{{").Replace("}", "}}") ?? string.Empty
          ) {
             Action = new Configuration.Action() {
                Type = "internal",

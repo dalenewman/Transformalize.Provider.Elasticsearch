@@ -49,7 +49,7 @@ namespace Test.Integration.Core {
         <add name='Categories' length='255' max='3' delimiter=',' />
       </fields>
       <calculated-fields>
-         <add name='CategoryArray' t='copy(Categories).split()' />
+         <add name='CategoryArray' t='copy(Categories).replace( ,).split(,)' />
       </calculated-fields>
     </add>
   </entities>

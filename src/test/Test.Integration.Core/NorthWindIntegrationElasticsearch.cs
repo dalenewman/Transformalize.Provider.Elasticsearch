@@ -35,24 +35,25 @@ using Transformalize.Providers.Elasticsearch;
 using Transformalize.Providers.Elasticsearch.Ext;
 using Transformalize.Providers.SqlServer;
 
-namespace Test.Integration {
+namespace Test.Integration.Core {
 
    [TestClass]
    public class NorthWindIntegrationSqlServerThenElastic {
 
       public string ElasticTestFile { get; set; } = @"Files\NorthWindSqlServerToElastic.xml";
       public string SqlTestFile { get; set; } = @"Files\NorthWind.xml";
+      public static string Password { get; set; } = "*";
 
       public Connection InputConnection { get; set; } = new Connection {
          Name = "input",
          Provider = "sqlserver",
-         ConnectionString = "server=localhost;database=NorthWind;trusted_connection=true;"
+         ConnectionString = $"server=localhost;database=NorthWind;User Id=sa;Password={Password};Trust Server Certificate=True"
       };
 
       public Connection OutputConnection { get; set; } = new Connection {
          Name = "output",
          Provider = "sqlserver",
-         ConnectionString = "Server=localhost;Database=TflNorthWind;trusted_connection=true;"
+         ConnectionString = $"Server=localhost;Database=TflNorthWind;User Id=sa;Password={Password};Trust Server Certificate=True"
       };
 
       public Connection ElasticConnection { get; set; } = new Connection {

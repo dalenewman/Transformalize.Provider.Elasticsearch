@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Elasticsearch.Net;
+using Newtonsoft.Json;
 using Transformalize.Context;
 using Transformalize.Contracts;
 
@@ -29,7 +30,7 @@ namespace Transformalize.Providers.Elasticsearch {
         readonly IElasticLowLevelClient _client;
         readonly Configuration.Field[] _fields;
         readonly OutputContext _context;
-        private readonly string _type;
+        // private readonly string _type;
         private readonly string _index;
 
         public ElasticPartialUpdater(OutputContext context, Configuration.Field[] fields, IElasticLowLevelClient client) {
@@ -37,21 +38,21 @@ namespace Transformalize.Providers.Elasticsearch {
             _fields = fields;
             _client = client;
             _index = context.Connection.Index;
-            _type = context.Entity.Alias.ToLower();
+            // _type = context.Entity.Alias.ToLower();
         }
 
         public void Delete(IEnumerable<IRow> rows) {
             // Could probably do bulk updates with partition and bulk operation
             foreach (var row in rows) {
                 var id = string.Concat(_context.OutputFields.Where(f => f.PrimaryKey).Select(f => row[f]));
-                _client.Update<VoidResponse>(_index, _type, id, row.ToExpandoObject(_fields));
+                _client.Update<VoidResponse>(_index, "_doc", id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
             }
         }
 
         public void Write(IEnumerable<IRow> rows) {
             foreach (var row in rows) {
                 var id = string.Concat(_context.OutputFields.Where(f => f.PrimaryKey).Select(f => row[f]));
-                _client.Update<VoidResponse>(_index, _type, id, row.ToExpandoObject(_fields));
+                _client.Update<VoidResponse>(_index, "_doc", id, PostData.String(JsonConvert.SerializeObject(row.ToExpandoObject(_fields))));
             }
         }
     }

@@ -3,13 +3,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Elasticsearch</RootNamespace>
     <AssemblyName>Transformalize.Provider.Elasticsearch</AssemblyName>
-    <Version>0.8.29-beta</Version>
+    <Version>0.10.2-beta</Version>
+    <FileVersion>0.10.2</FileVersion>
+    <AssemblyVersion>0.10.2</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Elasticsearch.Net" Version="5.6.6" />
+    <PackageReference Include="Elasticsearch.Net" Version="6.8.11" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Transformalize" Version="0.8.29-beta" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Transformalize" Version="0.10.2-beta" />
   </ItemGroup>
   <Import Project="..\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems" Label="Shared" />
 </Project>

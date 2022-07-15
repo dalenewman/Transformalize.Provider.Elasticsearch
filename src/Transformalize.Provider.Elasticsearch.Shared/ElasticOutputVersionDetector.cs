@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Elasticsearch.Net;
+using Newtonsoft.Json;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Providers.Elasticsearch.Ext;
@@ -28,7 +29,7 @@ namespace Transformalize.Providers.Elasticsearch {
 
       private readonly OutputContext _context;
       private readonly IElasticLowLevelClient _client;
-      private ElasticsearchResponse<DynamicResponse> _commonAggregations;
+      private DynamicResponse _commonAggregations;
 
       public ElasticOutputProvider(OutputContext context, IElasticLowLevelClient client) {
          _context = context;
@@ -61,7 +62,7 @@ namespace Transformalize.Providers.Elasticsearch {
             size = 0
          };
 
-         var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
+         var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), PostData.String(JsonConvert.SerializeObject(body)));
          dynamic value = null;
          if (result.Success) {
             try {
@@ -70,14 +71,7 @@ namespace Transformalize.Providers.Elasticsearch {
                _context.Error(ex, ex.Message);
             }
          } else {
-            if (result.ServerError != null) {
-               _context.Error(result.ServerError.ToString());
-            } else {
-               _context.Error(result.ToString());
-            }
-            if (result.DebugInformation != null) {
-               _context.Debug(() => result.DebugInformation);
-            }
+            _context.Error(result.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
          }
          var converted = value ?? null;
 
@@ -106,7 +100,7 @@ namespace Transformalize.Providers.Elasticsearch {
             var batchId = result.Body["aggregations"]["b"]["value"].Value;
             return (batchId == null ? 0 : (int)batchId) + 1;
          } else {
-            _context.Error(result.ServerError.ToString());
+            _context.Error(result.OriginalException.Message);
             _context.Debug(() => result.DebugInformation);
             return 0;
          }
@@ -120,8 +114,7 @@ namespace Transformalize.Providers.Elasticsearch {
             var key = result.Body["aggregations"]["k"]["value"].Value;
             return (key == null ? 0 : (int)key);
          } else {
-            _context.Error(result.ServerError.ToString());
-            _context.Debug(() => result.DebugInformation);
+            _context.Error(result.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
             return 0;
          }
       }
@@ -146,7 +139,7 @@ namespace Transformalize.Providers.Elasticsearch {
          throw new NotImplementedException();
       }
 
-      private ElasticsearchResponse<DynamicResponse> GetAggregations() {
+      private DynamicResponse GetAggregations() {
 
          if (_commonAggregations != null) {
             return _commonAggregations;
@@ -168,7 +161,7 @@ namespace Transformalize.Providers.Elasticsearch {
             size = 0
          };
 
-         _commonAggregations = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), new PostData<object>(body));
+         _commonAggregations = _client.Search<DynamicResponse>(_context.Connection.Index, PostData.String(JsonConvert.SerializeObject(body)));
          return _commonAggregations;
       }
 

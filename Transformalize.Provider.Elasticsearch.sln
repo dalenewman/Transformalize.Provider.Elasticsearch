@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28917.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4563C88-9C80-4BD0-949E-AA64F111957E}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,18 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Ela
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Integration", "src\test\Test.Integration\Test.Integration.csproj", "{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{42e1dea8-c0b1-4adc-89a9-0b367ecd0df2}*SharedItemsImports = 5
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{4ed1e259-756a-40b8-9800-f563b59e0206}*SharedItemsImports = 4
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{647b1638-964d-4a07-b3de-29de452bb0be}*SharedItemsImports = 5
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{67549944-8afc-4c83-b5da-e421f8e736b6}*SharedItemsImports = 13
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cad6f3ee-abbd-4853-9574-59af20278809}*SharedItemsImports = 13
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cd3477b9-14e5-4ea3-90b0-ca9299bcae73}*SharedItemsImports = 4
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{df60b8c2-d93e-436d-80f3-915859527e5c}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -84,10 +73,6 @@ Global
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5DB091E9-D391-46EF-B5B3-1A0C7B7FF01F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +90,14 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {960FC2FA-8CAD-47A3-8A4E-4173AE406E71}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{42e1dea8-c0b1-4adc-89a9-0b367ecd0df2}*SharedItemsImports = 5
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{4ed1e259-756a-40b8-9800-f563b59e0206}*SharedItemsImports = 4
+		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{647b1638-964d-4a07-b3de-29de452bb0be}*SharedItemsImports = 5
+		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{67549944-8afc-4c83-b5da-e421f8e736b6}*SharedItemsImports = 13
+		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cad6f3ee-abbd-4853-9574-59af20278809}*SharedItemsImports = 13
+		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cd3477b9-14e5-4ea3-90b0-ca9299bcae73}*SharedItemsImports = 4
+		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{df60b8c2-d93e-436d-80f3-915859527e5c}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

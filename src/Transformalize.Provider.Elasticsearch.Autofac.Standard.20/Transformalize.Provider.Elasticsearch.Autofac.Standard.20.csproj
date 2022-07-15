@@ -3,12 +3,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Elasticsearch.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.Elasticsearch.Autofac</AssemblyName>
-    <Version>0.8.29-beta</Version>
+    <Version>0.10.2-beta</Version>
+    <FileVersion>0.10.2</FileVersion>
+    <AssemblyVersion>0.10.2</AssemblyVersion>
   </PropertyGroup>
   <Import Project="..\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems" Label="Shared" />
   <ItemGroup>
-    <PackageReference Include="Elasticsearch.Net" Version="5.6.6" />
-    <PackageReference Include="Transformalize.Container.Autofac" Version="0.8.29-beta" />
+    <PackageReference Include="Elasticsearch.Net" Version="6.8.11" />
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.0-beta" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.Elasticsearch\Transformalize.Provider.Elasticsearch.csproj" />

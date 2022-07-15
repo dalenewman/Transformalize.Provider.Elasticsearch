@@ -37,13 +37,9 @@ namespace Transformalize.Providers.Elasticsearch {
       public IEnumerable<Field> GetFields(string name) {
 
          var version = ElasticVersionParser.ParseVersion(_input);
-         ElasticsearchResponse<DynamicResponse> response;
+         DynamicResponse response;
 
-         if (version.Major >= 7) {
-            response = _client.IndicesGetMapping<DynamicResponse>(_index, name, qs => qs.AddQueryString("include_type_name", "true"));
-         } else {
-            response = _client.IndicesGetMapping<DynamicResponse>(_index, name);
-         }
+         response = _client.IndicesGetMapping<DynamicResponse>(_index, name);
 
          if (response.Success) {
             var properties = response.Body[_index]["mappings"][name]["properties"] as ElasticsearchDynamicValue;
@@ -82,13 +78,9 @@ namespace Transformalize.Providers.Elasticsearch {
       public IEnumerable<Entity> GetEntities() {
 
          var version = ElasticVersionParser.ParseVersion(_input);
-         ElasticsearchResponse<DynamicResponse> response;
+         DynamicResponse response;
 
-         if (version.Major >= 7) {
-            response = _client.IndicesGetMapping<DynamicResponse>(_index, "_all", qs => qs.AddQueryString("include_type_name", "true"));
-         } else {
-            response = _client.IndicesGetMapping<DynamicResponse>(_index, "_all");
-         }
+         response = _client.IndicesGetMapping<DynamicResponse>(_index);
 
          if (response.Success) {
             var mappings = response.Body[_index]["mappings"] as ElasticsearchDynamicValue;

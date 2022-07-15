@@ -46,7 +46,7 @@ namespace Transformalize.Providers.Elasticsearch {
       public ElasticWriter(OutputContext context, IElasticLowLevelClient client) {
          _context = context;
          _client = client;
-         _prefix = "{\"index\": {\"_index\": \"" + context.Connection.Index + "\", \"_type\": \"" + context.Entity.Alias.ToLower() + "\", \"_id\": \"";
+         _prefix = "{\"index\": {\"_index\": \"" + context.Connection.Index + "\", \"_id\": \"";
          _fields = context.OutputFields.Select(f => new AliasField { Alias = f.Alias.ToLower(), Field = f }).ToArray();
          _settings = new JsonSerializerSettings {
             Formatting = Formatting.None,
@@ -90,16 +90,16 @@ namespace Transformalize.Providers.Elasticsearch {
                builder.AppendLine(JsonConvert.SerializeObject(_fields.ToDictionary(af => af.Alias, af => row[af.Field]), _settings));
             }
 
-            var response = _client.Bulk<DynamicResponse>(builder.ToString(), nv => nv
-                .AddQueryString("refresh", @"true")
-            );
+            var parameters = new BulkRequestParameters();
+            parameters.SetQueryString("refresh", @"true");
+            var response = _client.Bulk<DynamicResponse>(PostData.String(builder.ToString()), parameters);
 
             if (response.Success) {
                var count = batchCount;
                _context.Entity.Inserts += count;
                _context.Debug(() => $"{count} to output");
             } else {
-               _context.Error(response.OriginalException.Message);
+               _context.Error(response.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
             }
             builder.Clear();
             batchCount = 0;

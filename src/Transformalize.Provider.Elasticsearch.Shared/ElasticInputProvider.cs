@@ -24,6 +24,7 @@ using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Providers.Elasticsearch.Ext;
+using Newtonsoft.Json;
 
 namespace Transformalize.Providers.Elasticsearch {
     public class ElasticInputProvider : IInputProvider {
@@ -57,7 +58,9 @@ namespace Transformalize.Providers.Elasticsearch {
                 },
                 size = 0
             };
-            var result = _client.Search<DynamicResponse>(_context.Connection.Index, _context.TypeName(), body);
+            var json = JsonConvert.SerializeObject(body);
+            var result = _client.Search<DynamicResponse>(_context.Connection.Index, PostData.String(json));
+
             var value = version.Convert(result.Body["aggregations"]["version"]["value"].Value);
             _context.Debug(()=>$"Found value: {value}");
             return value;

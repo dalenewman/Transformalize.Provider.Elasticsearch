@@ -19,6 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Elasticsearch.Net;
+using Newtonsoft.Json.Linq;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -46,17 +47,15 @@ namespace Transformalize.Providers.Elasticsearch {
 
         public IEnumerable<IRow> Read() {
             _context.Debug(() => _context.Entity.Query);
-            var response = _client.Search<DynamicResponse>(new PostData<object>(_context.Entity.Query));
+            var response = _client.Search<DynamicResponse>(PostData.String(_context.Entity.Query));
 
             if (response.Success) {
-                var body = response.Body["aggregations"] as ElasticsearchDynamicValue;
-                if (body != null && body.HasValue) {
-                    return Flatten("aggregations", body.Value);
+                if (response.Body != null && response.Body["aggregations"].HasValue) {
+                    return Flatten("aggregations", response.Body["aggregations"].Value);
                 }
                 _context.Warn("An elastic query should return aggregations, but yours does not.");
             } else {
-                _context.Error(response.ServerError.ToString());
-                _context.Debug((() => response.DebugInformation));
+                _context.Error(response.DebugInformation.Replace("{", "{{").Replace("}", "}}"));
             }
             return new IRow[0];
         }

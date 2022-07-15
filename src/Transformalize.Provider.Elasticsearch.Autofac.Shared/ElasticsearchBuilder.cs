@@ -70,16 +70,25 @@ namespace Transformalize.Providers.Elasticsearch.Autofac {
 
             // Elasticsearch.Net
             _builder.Register(ctx => {
-               var settings = new ConnectionConfiguration(ctx.ResolveNamed<IConnectionPool>(connection.Key));
+
+               var pool = ctx.ResolveNamed<IConnectionPool>(connection.Key);
+               var settings = new ConnectionConfiguration(pool); // .EnableApiVersioningHeader();  
+
                if (!string.IsNullOrEmpty(connection.User)) {
-                  settings.BasicAuthentication(connection.User, connection.Password);
+                  settings = settings.BasicAuthentication(connection.User, connection.Password);
                }
+
+               //if (!string.IsNullOrEmpty(connection.CertificateFingerprint)) {
+               //   settings = settings.CertificateFingerprint(connection.CertificateFingerprint);
+               //}
+
                if (_process.Mode != "init" && connection.RequestTimeout >= 0) {
-                  settings.RequestTimeout(new TimeSpan(0, 0, 0, connection.RequestTimeout * 1000));
+                  settings = settings.RequestTimeout(new TimeSpan(0, 0, 0, connection.RequestTimeout * 1000));
                }
                if (connection.Timeout > 0) {
-                  settings.PingTimeout(new TimeSpan(0, 0, connection.Timeout));
+                  settings = settings.PingTimeout(new TimeSpan(0, 0, connection.Timeout));
                }
+
                return new ElasticLowLevelClient(settings);
             }).Named<IElasticLowLevelClient>(connection.Key);
 

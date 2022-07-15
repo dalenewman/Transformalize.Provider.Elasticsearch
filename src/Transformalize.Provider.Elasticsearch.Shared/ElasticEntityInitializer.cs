@@ -111,20 +111,15 @@ namespace Transformalize.Providers.Elasticsearch {
 
          var properties = new Dictionary<string, object> { { "properties", GetFields() } };
          var typeName = _context.Entity.Alias.ToLower();
-         var body = new Dictionary<string, object> { { typeName, properties } };
-         var json = JsonConvert.SerializeObject(body);
+         var json = JsonConvert.SerializeObject(properties);
 
-         ElasticsearchResponse<DynamicResponse> elasticResponse;
+         DynamicResponse elasticResponse;
 
-         if (version.Major >= 7) {
-            elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json, qs => qs.AddQueryString("include_type_name", "true"));
-         } else {
-            elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, typeName, json);
-         }
+         elasticResponse = _client.IndicesPutMapping<DynamicResponse>(_context.Connection.Index, json);
 
          var response = new ActionResponse(
             elasticResponse.HttpStatusCode ?? 500,
-            elasticResponse.ServerError == null ? string.Empty : elasticResponse.ServerError.Error.Reason ?? string.Empty
+            elasticResponse.OriginalException == null ? string.Empty : elasticResponse.DebugInformation.Replace("{", "{{").Replace("}", "}}") ?? string.Empty
          ) {
             Action = new Configuration.Action() {
                Type = "internal",
@@ -161,13 +156,13 @@ namespace Transformalize.Providers.Elasticsearch {
 
                      if (type.Equals("geo_point")) {
                         fields[alias] = new Dictionary<string, object> {
-                                    { "properties", new Dictionary<string,object> {{ "location", new Dictionary<string,object> { {"type","geo_point"} } } }}
-                                };
+                           { "properties", new Dictionary<string,object> {{ "location", new Dictionary<string,object> { {"type","geo_point"} } } }}
+                        };
                      } else {
                         fields[alias] = new Dictionary<string, object> {
-                                    { "type", version.Major >= 5 ? "keyword" : "string" },
-                                    { "store", searchType.Store }
-                                };
+                           { "type", version.Major >= 5 ? "keyword" : "string" },
+                           { "store", searchType.Store }
+                        };
                      }
 
                   } else {
@@ -178,20 +173,20 @@ namespace Transformalize.Providers.Elasticsearch {
                         if (type == "string") {
                            if (analyzer == "keyword") {
                               fields[alias] = new Dictionary<string, object> {
-                                            { "type", "keyword" }
-                                        };
+                                 { "type", "keyword" }
+                              };
                            } else {
                               fields[alias] = new Dictionary<string, object> {
-                                            { "type", "text" },
-                                            { "analyzer", analyzer },
-                                            { "store", searchType.Store }
-                                        };
+                                 { "type", "text" },
+                                 { "analyzer", analyzer },
+                                 { "store", searchType.Store }
+                              };
                            }
                         } else {
                            fields[alias] = new Dictionary<string, object> {
-                                        { "type", type },
-                                        { "analyzer", analyzer }
-                                    };
+                              { "type", type },
+                              { "analyzer", analyzer }
+                           };
                         }
 
                      } else {  // versions prior to 5 uses string types and keyword analyzer
