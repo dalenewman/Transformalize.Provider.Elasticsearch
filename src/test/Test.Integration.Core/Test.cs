@@ -34,8 +34,8 @@ namespace Test.Integration.Core {
       // note: these credentials are specific to the container running on dale's computer
       private static string Version = "8.3.2";
       private static string User = "elastic";
-      private static string Password = "Zgf4+hQ7+dmCnIUpk6Wr";  
-      private static string Fingerprint = "37:84:43:71:D1:57:AE:34:9D:FE:FB:2A:A5:E2:DC:65:7B:62:16:9C:8E:E3:58:DB:30:EF:CD:9E:06:85:7D:03";
+      private static string Password = "1JN_8oISzY1d-T=P9iHF";  
+      private static string Fingerprint = "DA:35:81:AA:E4:02:75:31:CE:22:A3:25:E7:54:26:49:20:B2:8C:73:1C:AD:14:B0:58:9B:F8:3E:3F:1B:B9:31";
 
       [TestMethod]
       public void Write() {

@@ -13,13 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{8FE1844F
 		nuget\myget.bat = nuget\myget.bat
 		nuget\nuget.bat = nuget\nuget.bat
 		nuget\Transformalize.Provider.Elasticsearch.Autofac.nuspec = nuget\Transformalize.Provider.Elasticsearch.Autofac.nuspec
-		nuget\Transformalize.Provider.Elasticsearch.Autofac.v3.nuspec = nuget\Transformalize.Provider.Elasticsearch.Autofac.v3.nuspec
 		nuget\Transformalize.Provider.Elasticsearch.nuspec = nuget\Transformalize.Provider.Elasticsearch.nuspec
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch", "src\Transformalize.Provider.Elasticsearch\Transformalize.Provider.Elasticsearch.csproj", "{4ED1E259-756A-40B8-9800-F563B59E0206}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Autofac", "src\Transformalize.Provider.Elasticsearch.Autofac\Transformalize.Provider.Elasticsearch.Autofac.csproj", "{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cfg", "cfg", "{B0BC2A9C-9618-4E64-8DC5-2B8599A13BB7}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,21 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cfg", "cfg", "{B0BC2A9C-961
 		cfg\read-me-write.xml = cfg\read-me-write.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Autofac.v3", "src\Transformalize.Provider.Elasticsearch.Autofac.v3\Transformalize.Provider.Elasticsearch.Autofac.v3.csproj", "{DF60B8C2-D93E-436D-80F3-915859527E5C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provider", "Provider", "{2B0EBF42-CB36-42DD-822B-55F917A2EC71}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provider.Autofac", "Provider.Autofac", "{FECB702E-732D-4D09-B5A0-B285F00AE9E6}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Autofac.Shared", "src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.shproj", "{CAD6F3EE-ABBD-4853-9574-59AF20278809}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Elasticsearch.Shared", "src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.shproj", "{67549944-8AFC-4C83-B5DA-E421F8E736B6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Standard.20", "src\Transformalize.Provider.Elasticsearch.Standard.20\Transformalize.Provider.Elasticsearch.Standard.20.csproj", "{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Elasticsearch.Autofac.Standard.20", "src\Transformalize.Provider.Elasticsearch.Autofac.Standard.20\Transformalize.Provider.Elasticsearch.Autofac.Standard.20.csproj", "{647B1638-964D-4A07-B3DE-29DE452BB0BE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Integration.Core", "src\test\Test.Integration.Core\Test.Integration.Core.csproj", "{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch", "src\Transformalize.Provider.Elasticsearch\Transformalize.Provider.Elasticsearch.csproj", "{F9B4D36F-D442-42D4-8284-F6D4F93B1F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Elasticsearch.Autofac", "src\Transformalize.Provider.Elasticsearch.Autofac\Transformalize.Provider.Elasticsearch.Autofac.csproj", "{A74B70EA-64A4-49B4-88EE-8A476DC1A52C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,55 +34,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4ED1E259-756A-40B8-9800-F563B59E0206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ED1E259-756A-40B8-9800-F563B59E0206}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ED1E259-756A-40B8-9800-F563B59E0206}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ED1E259-756A-40B8-9800-F563B59E0206}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF60B8C2-D93E-436D-80F3-915859527E5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{647B1638-964D-4A07-B3DE-29DE452BB0BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39CE2C87-F2B5-4A92-B3FA-CE4786A5D78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9B4D36F-D442-42D4-8284-F6D4F93B1F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9B4D36F-D442-42D4-8284-F6D4F93B1F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9B4D36F-D442-42D4-8284-F6D4F93B1F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9B4D36F-D442-42D4-8284-F6D4F93B1F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A74B70EA-64A4-49B4-88EE-8A476DC1A52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A74B70EA-64A4-49B4-88EE-8A476DC1A52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A74B70EA-64A4-49B4-88EE-8A476DC1A52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A74B70EA-64A4-49B4-88EE-8A476DC1A52C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8FE1844F-26A4-47BE-9507-F0333D42FABE} = {C4563C88-9C80-4BD0-949E-AA64F111957E}
-		{4ED1E259-756A-40B8-9800-F563B59E0206} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
-		{CD3477B9-14E5-4EA3-90B0-CA9299BCAE73} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
 		{B0BC2A9C-9618-4E64-8DC5-2B8599A13BB7} = {C4563C88-9C80-4BD0-949E-AA64F111957E}
-		{DF60B8C2-D93E-436D-80F3-915859527E5C} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
-		{CAD6F3EE-ABBD-4853-9574-59AF20278809} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
-		{67549944-8AFC-4C83-B5DA-E421F8E736B6} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
-		{42E1DEA8-C0B1-4ADC-89A9-0B367ECD0DF2} = {2B0EBF42-CB36-42DD-822B-55F917A2EC71}
-		{647B1638-964D-4A07-B3DE-29DE452BB0BE} = {FECB702E-732D-4D09-B5A0-B285F00AE9E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {960FC2FA-8CAD-47A3-8A4E-4173AE406E71}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{42e1dea8-c0b1-4adc-89a9-0b367ecd0df2}*SharedItemsImports = 5
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{4ed1e259-756a-40b8-9800-f563b59e0206}*SharedItemsImports = 4
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{647b1638-964d-4a07-b3de-29de452bb0be}*SharedItemsImports = 5
-		src\Transformalize.Provider.Elasticsearch.Shared\Transformalize.Provider.Elasticsearch.Shared.projitems*{67549944-8afc-4c83-b5da-e421f8e736b6}*SharedItemsImports = 13
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cad6f3ee-abbd-4853-9574-59af20278809}*SharedItemsImports = 13
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{cd3477b9-14e5-4ea3-90b0-ca9299bcae73}*SharedItemsImports = 4
-		src\Transformalize.Provider.Elasticsearch.Autofac.Shared\Transformalize.Provider.Elasticsearch.Autofac.Shared.projitems*{df60b8c2-d93e-436d-80f3-915859527e5c}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
